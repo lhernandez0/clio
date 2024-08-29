@@ -10,11 +10,19 @@
             "url": "https://www.manilatimes.net/news/feed/"
         },
         {
-            "feed_name": "National News",
+            "feed_name": "Nation",
             "url": "https://www.manilatimes.net/news/national/feed/"
         },
         {
-            "feed_name": "World News",
+            "feed_name": "Photos",
+            "url": "https://www.manilatimes.net/photos/feed/"
+        },
+        {
+            "feed_name": "Podcasts",
+            "url": "https://www.manilatimes.net/podcasts/feed/"
+        },
+        {
+            "feed_name": "World",
             "url": "https://www.manilatimes.net/world/feed/"
         },
         {
@@ -22,12 +30,20 @@
             "url": "https://www.manilatimes.net/regions/feed/"
         },
         {
-            "feed_name": "The Sunday Times",
+            "feed_name": "The Sunday Times Magazine",
             "url": "https://www.manilatimes.net/the-sunday-times/feed/"
         },
         {
             "feed_name": "Arts Awake",
             "url": "https://www.manilatimes.net/the-sunday-times/arts-awake/feed/"
+        },
+        {
+            "feed_name": "Filipino Champions",
+            "url": "https://www.manilatimes.net/the-sunday-times/filipino-champions/feed/"
+        },
+        {
+            "feed_name": "Fun Times",
+            "url": "https://www.manilatimes.net/the-sunday-times/fun-times/feed/"
         },
         {
             "feed_name": "Literary Life",
@@ -52,6 +68,98 @@
         {
             "feed_name": "Boardroom Watch",
             "url": "https://www.manilatimes.net/business/boardroom-watch/feed/"
+        },
+        {
+            "feed_name": "Build & Design",
+            "url": "https://www.manilatimes.net/business/real-estate-and-property/feed/"
+        },
+        {
+            "feed_name": "Corporate News",
+            "url": "https://www.manilatimes.net/business/corporate-news/feed/"
+        },
+        {
+            "feed_name": "Foreign Business",
+            "url": "https://www.manilatimes.net/business/foreign-business/feed/"
+        },
+        {
+            "feed_name": "Green Industries",
+            "url": "https://www.manilatimes.net/business/green-industries/feed/"
+        },
+        {
+            "feed_name": "Maritime",
+            "url": "https://www.manilatimes.net/business/maritime/feed/"
+        },
+        {
+            "feed_name": "Stock Watch",
+            "url": "https://www.manilatimes.net/business/stock-watch/feed/"
+        },
+        {
+            "feed_name": "Sunday Business & IT",
+            "url": "https://www.manilatimes.net/business/sunday-business-&-it/feed/"
+        },
+        {
+            "feed_name": "Top Business",
+            "url": "https://www.manilatimes.net/business/top-business/feed/"
+        },
+        {
+            "feed_name": "Entertainment & Lifestyle",
+            "url": "https://www.manilatimes.net/entertainment-lifestyle/feed/"
+        },
+        {
+            "feed_name": "Entertainment",
+            "url": "https://www.manilatimes.net/entertainment-lifestyle/show-times/feed/"
+        },
+        {
+            "feed_name": "Lifestyle",
+            "url": "https://www.manilatimes.net/entertainment-lifestyle/life-times/feed/"
+        },
+        {
+            "feed_name": "Opinion",
+            "url": "https://www.manilatimes.net/opinion/feed/"
+        },
+        {
+            "feed_name": "Editorial",
+            "url": "https://www.manilatimes.net/opinion/editorial/feed/"
+        },
+        {
+            "feed_name": "Editorial Cartoon",
+            "url": "https://www.manilatimes.net/opinion/editorial-cartoon/feed/"
+        },
+        {
+            "feed_name": "Columns",
+            "url": "https://www.manilatimes.net/opinion/columns/feed/"
+        },
+        {
+            "feed_name": "From Our Readers",
+            "url": "https://www.manilatimes.net/opinion/letters-to-the-editor/feed/"
+        },
+        {
+            "feed_name": "Expats & Diplomats",
+            "url": "https://www.manilatimes.net/expats-diplomats/feed/"
+        },
+        {
+            "feed_name": "Videos",
+            "url": "https://www.manilatimes.net/videos/feed/"
+        },
+        {
+            "feed_name": "Public Square",
+            "url": "https://www.manilatimes.net/public-square/feed/"
+        },
+        {
+            "feed_name": "Sports",
+            "url": "https://www.manilatimes.net/sports/feed/"
+        },
+        {
+            "feed_name": "Special Features",
+            "url": "https://www.manilatimes.net/supplements/feed/"
+        },
+        {
+            "feed_name": "Campus Press",
+            "url": "https://www.manilatimes.net/campus-press/feed/"
+        },
+        {
+            "feed_name": "Fast Times",
+            "url": "https://www.manilatimes.net/fast-times/feed/"
         }
     ]
 }
