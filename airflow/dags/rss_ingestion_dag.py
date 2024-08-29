@@ -20,57 +20,67 @@ default_args = {
     "retry_delay": timedelta(minutes=3),
 }
 
-dag = DAG(
-    "rss_ingestion_dag",
-    default_args=default_args,
-    description="A DAG to ingest RSS feeds from major news outlets",
-    schedule_interval=timedelta(minutes=60),  # Runs every hour
-)
-
 logger = logging.getLogger(__name__)
 
 
-# Function to create tasks dynamically
-def create_rss_tasks(json_file):
-    logger.info("Creating tasks from JSON file: %s", json_file)
-    try:
-        with open(json_file, "r") as f:
-            feeds = json.load(f)
-            outlet_name = feeds.get("name")
-            if not outlet_name:
-                logger.warning("No 'name' field found in JSON file: %s", json_file)
-                return
+# Function to clean feed name
+def clean_feed_name(name):
+    # Remove non-alphanumeric characters and replace spaces with underscores
+    cleaned_name = "".join(char for char in name if char.isalnum() or char == " ")
+    return cleaned_name.replace(" ", "_").lower()
 
-            for feed in feeds.get("rss_feeds", []):
-                feed_name = (
-                    feed.get("feed_name", "default_feed").lower().replace(" ", "_")
+
+# Function to create a DAG dynamically
+def create_dag(dag_id, json_file):
+    logger.info(f"Creating DAG from JSON file: {json_file}")
+    dag = DAG(
+        dag_id=dag_id,
+        default_args=default_args,
+        description=f"A DAG to ingest RSS feeds from {json_file}",
+        schedule_interval=timedelta(minutes=60),  # Runs every hour
+    )
+
+    with open(json_file, "r") as f:
+        feeds = json.load(f)
+        outlet_name = feeds.get("name")
+        if not outlet_name:
+            logger.warning("No 'name' field found in JSON file: %s", json_file)
+            return None
+
+        previous_task = None
+        for feed in feeds.get("rss_feeds", []):
+            feed_name = clean_feed_name(feed.get("feed_name", "default_feed"))
+            feed_url = feed.get("url")
+            if not feed_url:
+                logger.warning(
+                    "No 'url' field found for feed in JSON file: %s", json_file
                 )
-                feed_url = feed.get("url")
-                if not feed_url:
-                    logger.warning(
-                        "No 'url' field found for feed in JSON file: %s", json_file
-                    )
-                    continue
+                continue
 
-                task_id = f'fetch_{outlet_name.lower().replace(" ", "_")}_{feed_name}'
-                fetch_task = FetchRSSFeedOperator(
-                    task_id=task_id,
-                    feed_url=feed_url,
-                    es_index="rss_feeds",
-                    outlet_name=outlet_name,
-                    dag=dag,
-                )
-                logger.info("Created task with ID: %s", task_id)
-                fetch_task
+            task_id = f'fetch_{outlet_name.lower().replace(" ", "_")}_{feed_name}'
+            fetch_task = FetchRSSFeedOperator(
+                task_id=task_id,
+                feed_url=feed_url,
+                es_index="rss_feeds",
+                outlet_name=outlet_name,
+                dag=dag,
+            )
+            logger.info("Created task with ID: %s", task_id)
 
-    except Exception as e:
-        logger.error("Error processing JSON file %s: %s", json_file, e)
+            # Set task dependencies to ensure sequential execution
+            if previous_task:
+                previous_task >> fetch_task
+
+            previous_task = fetch_task
+
+    return dag
 
 
-# Iterate over all JSON files in the config directory
+# Iterate over all JSON files in the config directory and create a DAG for each
 config_dir = os.path.join(os.getcwd(), "config", "news_outlets")
 for file_name in os.listdir(config_dir):
     if file_name.endswith(".json"):
         file_path = os.path.join(config_dir, file_name)
         logger.info("Processing JSON file: %s", file_path)
-        create_rss_tasks(file_path)
+        dag_id = f"{file_name.replace('.json', '')}_rss_ingestion_dag"
+        globals()[dag_id] = create_dag(dag_id, file_path)
