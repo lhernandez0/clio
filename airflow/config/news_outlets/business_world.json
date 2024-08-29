@@ -1,0 +1,9 @@
+{
+    "name": "Business World",
+    "rss_feeds": [
+        {
+            "feed_name": "Feed",
+            "url": "https://www.bworldonline.com/feed/"
+        }
+    ]
+}

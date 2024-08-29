@@ -1,0 +1,93 @@
+{
+    "name": "Philippine Star",
+    "rss_feeds": [
+        {
+            "feed_name": "Headlines",
+            "url": "https://www.philstar.com/rss/headlines"
+        },
+        {
+            "feed_name": "Opinion",
+            "url": "https://www.philstar.com/rss/opinion"
+        },
+        {
+            "feed_name": "Nation",
+            "url": "https://www.philstar.com/rss/nation"
+        },
+        {
+            "feed_name": "World",
+            "url": "https://www.philstar.com/rss/world"
+        },
+        {
+            "feed_name": "Business",
+            "url": "https://www.philstar.com/rss/business"
+        },
+        {
+            "feed_name": "Sports",
+            "url": "https://www.philstar.com/rss/sports"
+        },
+        {
+            "feed_name": "Entertainment",
+            "url": "https://www.philstar.com/rss/entertainment"
+        },
+        {
+            "feed_name": "Lifestyle",
+            "url": "https://www.philstar.com/rss/lifestyle"
+        },
+        {
+            "feed_name": "PSN Bansa",
+            "url": "https://www.philstar.com/rss/pilipino-star-ngayon/bansa"
+        },
+        {
+            "feed_name": "PSN Probinsiya",
+            "url": "https://www.philstar.com/rss/pilipino-star-ngayon/probinsiya"
+        },
+        {
+            "feed_name": "PSN Metro",
+            "url": "https://www.philstar.com/rss/pilipino-star-ngayon/metro"
+        },
+        {
+            "feed_name": "PSN Opinyon",
+            "url": "https://www.philstar.com/rss/pilipino-star-ngayon/opinyon"
+        },
+        {
+            "feed_name": "PSN Palaro",
+            "url": "https://www.philstar.com/rss/pilipino-star-ngayon/palaro"
+        },
+        {
+            "feed_name": "PSN Showbiz",
+            "url": "https://www.philstar.com/rss/pilipino-star-ngayon/showbiz"
+        },
+        {
+            "feed_name": "The Freeman",
+            "url": "https://www.philstar.com/rss/the-freeman"
+        },
+        {
+            "feed_name": "Pang-Masa",
+            "url": "https://www.philstar.com/rss/pang-masa"
+        },
+        {
+            "feed_name": "Banat",
+            "url": "https://www.philstar.com/rss/banat"
+        },
+        {
+            "feed_name": "Interaksyon Trends + Spotlights",
+            "url": "https://interaksyon.philstar.com/trends-spotlights/feed/"
+        },
+        {
+            "feed_name": "Interaksyon Politics + Issues",
+            "url": "https://interaksyon.philstar.com/politics-issues/feed/"
+        },
+        {
+            "feed_name": "Interaksyon Celebrities",
+            "url": "https://interaksyon.philstar.com/celebrities/feed/"
+        },
+        {
+            "feed_name": "Interaksyon Hobbies + Interests",
+            "url": "https://interaksyon.philstar.com/hobbies-interests/feed/"
+        },
+        {
+            "feed_name": "Interaksyon Rumor Cop",
+            "url": "https://interaksyon.philstar.com/rumor-cop/feed/"
+        }
+    ]
+}

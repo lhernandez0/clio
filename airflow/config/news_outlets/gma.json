@@ -2,204 +2,204 @@
     "name": "GMA",
     "rss_feeds": [
         {
-            "name": "Public Affairs",
-            "link": "https://data.gmanetwork.com/gno/rss/publicaffairs/feed.xml"
-          },
-          {
-            "name": "Photo",
-            "link": "https://data.gmanetwork.com/gno/rss/photo/feed.xml"
-          },
-          {
-            "name": "Video",
-            "link": "https://data.gmanetwork.com/gno/rss/video/feed.xml"
-          },
-          {
-            "name": "NewsTV",
-            "link": "https://data.gmanetwork.com/gno/rss/newstv/feed.xml"
-          },
-          {
-            "name": "Serbisyo Publiko",
-            "link": "https://data.gmanetwork.com/gno/rss/serbisyopubliko/feed.xml"
-          },
-          {
-            "name": "Walang Pasok",
-            "link": "https://data.gmanetwork.com/gno/rss/serbisyopubliko/walangpasok/feed.xml"
-          },
-          {
-            "name": "Transportation",
-            "link": "https://data.gmanetwork.com/gno/rss/serbisyopubliko/transportation/feed.xml"
-          },
-          {
-            "name": "Missing Persons",
-            "link": "https://data.gmanetwork.com/gno/rss/serbisyopubliko/missingpersons/feed.xml"
-          },
-          {
-            "name": "News",
-            "link": "https://data.gmanetwork.com/gno/rss/news/feed.xml"
-          },
-          {
-            "name": "World",
-            "link": "https://data.gmanetwork.com/gno/rss/news/world/feed.xml"
-          },
-          {
-            "name": "Metro",
-            "link": "https://data.gmanetwork.com/gno/rss/news/metro/feed.xml"
-          },
-          {
-            "name": "Nation",
-            "link": "https://data.gmanetwork.com/gno/rss/news/nation/feed.xml"
-          },
-          {
-            "name": "Regions",
-            "link": "https://data.gmanetwork.com/gno/rss/news/regions/feed.xml"
-          },
-          {
-            "name": "Special Reports",
-            "link": "https://data.gmanetwork.com/gno/rss/news/specialreports/feed.xml"
-          },
-          {
-            "name": "Ulat Filipino",
-            "link": "https://data.gmanetwork.com/gno/rss/news/ulatfilipino/feed.xml"
-          },
-          {
-            "name": "Hashtag",
-            "link": "https://data.gmanetwork.com/gno/rss/hashtag/feed.xml"
-          },
-          {
-            "name": "Community Bulletin Board",
-            "link": "https://data.gmanetwork.com/gno/rss/cbb/feed.xml"
-          },
-          {
-            "name": "Money",
-            "link": "https://data.gmanetwork.com/gno/rss/money/feed.xml"
-          },
-          {
-            "name": "Personal Finance",
-            "link": "https://data.gmanetwork.com/gno/rss/money/personalfinance/feed.xml"
-          },
-          {
-            "name": "Companies",
-            "link": "https://data.gmanetwork.com/gno/rss/money/companies/feed.xml"
-          },
-          {
-            "name": "Economy",
-            "link": "https://data.gmanetwork.com/gno/rss/money/economy/feed.xml"
-          },
-          {
-            "name": "Motoring",
-            "link": "https://data.gmanetwork.com/gno/rss/money/motoring/feed.xml"
-          },
-          {
-            "name": "Sports",
-            "link": "https://data.gmanetwork.com/gno/rss/sports/feed.xml"
-          },
-          {
-            "name": "Basketball",
-            "link": "https://data.gmanetwork.com/gno/rss/sports/basketball/feed.xml"
-          },
-          {
-            "name": "Boxing",
-            "link": "https://data.gmanetwork.com/gno/rss/sports/boxing/feed.xml"
-          },
-          {
-            "name": "Football",
-            "link": "https://data.gmanetwork.com/gno/rss/sports/football/feed.xml"
-          },
-          {
-            "name": "Other sports",
-            "link": "https://data.gmanetwork.com/gno/rss/sports/othersports/feed.xml"
-          },
-          {
-            "name": "Volleyball",
-            "link": "https://data.gmanetwork.com/gno/rss/sports/volleyball/feed.xml"
-          },
-          {
-            "name": "Pinoy Abroad",
-            "link": "https://data.gmanetwork.com/gno/rss/pinoyabroad/feed.xml"
-          },
-          {
-            "name": "Pinoy Achievers",
-            "link": "https://data.gmanetwork.com/gno/rss/pinoyabroad/pinoyachievers/feed.xml"
-          },
-          {
-            "name": "Immigration Guide",
-            "link": "https://data.gmanetwork.com/gno/rss/pinoyabroad/immigrationguide/feed.xml"
-          },
-          {
-            "name": "Dispatch",
-            "link": "https://data.gmanetwork.com/gno/rss/pinoyabroad/dispatch/feed.xml"
-          },
-          {
-            "name": "SciTech",
-            "link": "https://data.gmanetwork.com/gno/rss/scitech/feed.xml"
-          },
-          {
-            "name": "Science and Research",
-            "link": "https://data.gmanetwork.com/gno/rss/scitech/science/feed.xml"
-          },
-          {
-            "name": "Technology, Gadgets and Gaming",
-            "link": "https://data.gmanetwork.com/gno/rss/scitech/technology/feed.xml"
-          },
-          {
-            "name": "Weather",
-            "link": "https://data.gmanetwork.com/gno/rss/scitech/weather/feed.xml"
-          },
-          {
-            "name": "Showbiz",
-            "link": "https://data.gmanetwork.com/gno/rss/showbiz/feed.xml"
-          },
-          {
-            "name": "Chika Minute",
-            "link": "https://data.gmanetwork.com/gno/rss/showbiz/chikaminute/feed.xml"
-          },
-          {
-            "name": "Showbiz Abroad",
-            "link": "https://data.gmanetwork.com/gno/rss/showbiz/showbizabroad/feed.xml"
-          },
-          {
-            "name": "Pep",
-            "link": "https://data.gmanetwork.com/gno/rss/showbiz/pep/feed.xml"
-          },
-          {
-            "name": "Lifestyle",
-            "link": "https://data.gmanetwork.com/gno/rss/lifestyle/feed.xml"
-          },
-          {
-            "name": "Travel",
-            "link": "https://data.gmanetwork.com/gno/rss/lifestyle/travel/feed.xml"
-          },
-          {
-            "name": "Food",
-            "link": "https://data.gmanetwork.com/gno/rss/lifestyle/food/feed.xml"
-          },
-          {
-            "name": "Art and Culture",
-            "link": "https://data.gmanetwork.com/gno/rss/lifestyle/artandculture/feed.xml"
-          },
-          {
-            "name": "Health and Wellness",
-            "link": "https://data.gmanetwork.com/gno/rss/lifestyle/healthandwellness/feed.xml"
-          },
-          {
-            "name": "Family and Relationships",
-            "link": "https://data.gmanetwork.com/gno/rss/lifestyle/familyandrelationships/feed.xml"
-          },
-          {
-            "name": "Shopping and Fashion",
-            "link": "https://data.gmanetwork.com/gno/rss/lifestyle/shoppingandfashion/feed.xml"
-          },
-          {
-            "name": "Hobbies and Activities",
-            "link": "https://data.gmanetwork.com/gno/rss/lifestyle/hobbiesandactivities/feed.xml"
-          },
-          {
-            "name": "Opinion",
-            "link": "https://data.gmanetwork.com/gno/rss/opinion/feed.xml"
-          },
-          {
-            "name": "News Hardcore",
-            "link": "https://data.gmanetwork.com/gno/rss/opinion/newshardcore/feed.xml"
-          }
+            "feed_name": "Public Affairs",
+            "url": "https://data.gmanetwork.com/gno/rss/publicaffairs/feed.xml"
+        },
+        {
+            "feed_name": "Photo",
+            "url": "https://data.gmanetwork.com/gno/rss/photo/feed.xml"
+        },
+        {
+            "feed_name": "Video",
+            "url": "https://data.gmanetwork.com/gno/rss/video/feed.xml"
+        },
+        {
+            "feed_name": "NewsTV",
+            "url": "https://data.gmanetwork.com/gno/rss/newstv/feed.xml"
+        },
+        {
+            "feed_name": "Serbisyo Publiko",
+            "url": "https://data.gmanetwork.com/gno/rss/serbisyopubliko/feed.xml"
+        },
+        {
+            "feed_name": "Walang Pasok",
+            "url": "https://data.gmanetwork.com/gno/rss/serbisyopubliko/walangpasok/feed.xml"
+        },
+        {
+            "feed_name": "Transportation",
+            "url": "https://data.gmanetwork.com/gno/rss/serbisyopubliko/transportation/feed.xml"
+        },
+        {
+            "feed_name": "Missing Persons",
+            "url": "https://data.gmanetwork.com/gno/rss/serbisyopubliko/missingpersons/feed.xml"
+        },
+        {
+            "feed_name": "News",
+            "url": "https://data.gmanetwork.com/gno/rss/news/feed.xml"
+        },
+        {
+            "feed_name": "World",
+            "url": "https://data.gmanetwork.com/gno/rss/news/world/feed.xml"
+        },
+        {
+            "feed_name": "Metro",
+            "url": "https://data.gmanetwork.com/gno/rss/news/metro/feed.xml"
+        },
+        {
+            "feed_name": "Nation",
+            "url": "https://data.gmanetwork.com/gno/rss/news/nation/feed.xml"
+        },
+        {
+            "feed_name": "Regions",
+            "url": "https://data.gmanetwork.com/gno/rss/news/regions/feed.xml"
+        },
+        {
+            "feed_name": "Special Reports",
+            "url": "https://data.gmanetwork.com/gno/rss/news/specialreports/feed.xml"
+        },
+        {
+            "feed_name": "Ulat Filipino",
+            "url": "https://data.gmanetwork.com/gno/rss/news/ulatfilipino/feed.xml"
+        },
+        {
+            "feed_name": "Hashtag",
+            "url": "https://data.gmanetwork.com/gno/rss/hashtag/feed.xml"
+        },
+        {
+            "feed_name": "Community Bulletin Board",
+            "url": "https://data.gmanetwork.com/gno/rss/cbb/feed.xml"
+        },
+        {
+            "feed_name": "Money",
+            "url": "https://data.gmanetwork.com/gno/rss/money/feed.xml"
+        },
+        {
+            "feed_name": "Personal Finance",
+            "url": "https://data.gmanetwork.com/gno/rss/money/personalfinance/feed.xml"
+        },
+        {
+            "feed_name": "Companies",
+            "url": "https://data.gmanetwork.com/gno/rss/money/companies/feed.xml"
+        },
+        {
+            "feed_name": "Economy",
+            "url": "https://data.gmanetwork.com/gno/rss/money/economy/feed.xml"
+        },
+        {
+            "feed_name": "Motoring",
+            "url": "https://data.gmanetwork.com/gno/rss/money/motoring/feed.xml"
+        },
+        {
+            "feed_name": "Sports",
+            "url": "https://data.gmanetwork.com/gno/rss/sports/feed.xml"
+        },
+        {
+            "feed_name": "Basketball",
+            "url": "https://data.gmanetwork.com/gno/rss/sports/basketball/feed.xml"
+        },
+        {
+            "feed_name": "Boxing",
+            "url": "https://data.gmanetwork.com/gno/rss/sports/boxing/feed.xml"
+        },
+        {
+            "feed_name": "Football",
+            "url": "https://data.gmanetwork.com/gno/rss/sports/football/feed.xml"
+        },
+        {
+            "feed_name": "Other sports",
+            "url": "https://data.gmanetwork.com/gno/rss/sports/othersports/feed.xml"
+        },
+        {
+            "feed_name": "Volleyball",
+            "url": "https://data.gmanetwork.com/gno/rss/sports/volleyball/feed.xml"
+        },
+        {
+            "feed_name": "Pinoy Abroad",
+            "url": "https://data.gmanetwork.com/gno/rss/pinoyabroad/feed.xml"
+        },
+        {
+            "feed_name": "Pinoy Achievers",
+            "url": "https://data.gmanetwork.com/gno/rss/pinoyabroad/pinoyachievers/feed.xml"
+        },
+        {
+            "feed_name": "Immigration Guide",
+            "url": "https://data.gmanetwork.com/gno/rss/pinoyabroad/immigrationguide/feed.xml"
+        },
+        {
+            "feed_name": "Dispatch",
+            "url": "https://data.gmanetwork.com/gno/rss/pinoyabroad/dispatch/feed.xml"
+        },
+        {
+            "feed_name": "SciTech",
+            "url": "https://data.gmanetwork.com/gno/rss/scitech/feed.xml"
+        },
+        {
+            "feed_name": "Science and Research",
+            "url": "https://data.gmanetwork.com/gno/rss/scitech/science/feed.xml"
+        },
+        {
+            "feed_name": "Technology, Gadgets and Gaming",
+            "url": "https://data.gmanetwork.com/gno/rss/scitech/technology/feed.xml"
+        },
+        {
+            "feed_name": "Weather",
+            "url": "https://data.gmanetwork.com/gno/rss/scitech/weather/feed.xml"
+        },
+        {
+            "feed_name": "Showbiz",
+            "url": "https://data.gmanetwork.com/gno/rss/showbiz/feed.xml"
+        },
+        {
+            "feed_name": "Chika Minute",
+            "url": "https://data.gmanetwork.com/gno/rss/showbiz/chikaminute/feed.xml"
+        },
+        {
+            "feed_name": "Showbiz Abroad",
+            "url": "https://data.gmanetwork.com/gno/rss/showbiz/showbizabroad/feed.xml"
+        },
+        {
+            "feed_name": "Pep",
+            "url": "https://data.gmanetwork.com/gno/rss/showbiz/pep/feed.xml"
+        },
+        {
+            "feed_name": "Lifestyle",
+            "url": "https://data.gmanetwork.com/gno/rss/lifestyle/feed.xml"
+        },
+        {
+            "feed_name": "Travel",
+            "url": "https://data.gmanetwork.com/gno/rss/lifestyle/travel/feed.xml"
+        },
+        {
+            "feed_name": "Food",
+            "url": "https://data.gmanetwork.com/gno/rss/lifestyle/food/feed.xml"
+        },
+        {
+            "feed_name": "Art and Culture",
+            "url": "https://data.gmanetwork.com/gno/rss/lifestyle/artandculture/feed.xml"
+        },
+        {
+            "feed_name": "Health and Wellness",
+            "url": "https://data.gmanetwork.com/gno/rss/lifestyle/healthandwellness/feed.xml"
+        },
+        {
+            "feed_name": "Family and Relationships",
+            "url": "https://data.gmanetwork.com/gno/rss/lifestyle/familyandrelationships/feed.xml"
+        },
+        {
+            "feed_name": "Shopping and Fashion",
+            "url": "https://data.gmanetwork.com/gno/rss/lifestyle/shoppingandfashion/feed.xml"
+        },
+        {
+            "feed_name": "Hobbies and Activities",
+            "url": "https://data.gmanetwork.com/gno/rss/lifestyle/hobbiesandactivities/feed.xml"
+        },
+        {
+            "feed_name": "Opinion",
+            "url": "https://data.gmanetwork.com/gno/rss/opinion/feed.xml"
+        },
+        {
+            "feed_name": "News Hardcore",
+            "url": "https://data.gmanetwork.com/gno/rss/opinion/newshardcore/feed.xml"
+        }
     ]
 }
