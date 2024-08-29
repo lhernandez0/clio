@@ -5,4 +5,10 @@
 pre-commit
 
 # release
-apache-airflow
+apache-airflow[celery]
+elasticsearch
+feedparser
+langdetect
+psycopg2-binary
+spacy 
+textblob 

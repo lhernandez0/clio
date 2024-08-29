@@ -1,0 +1,9 @@
+{
+    "name": "Inquirer",
+    "rss_feeds": [
+        {
+            "feed_name": "Full Feed",
+            "url": "https://www.inquirer.net/fullfeed/"
+        }
+    ]
+}

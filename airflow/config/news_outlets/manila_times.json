@@ -1,0 +1,57 @@
+{
+    "name": "Manila Times",
+    "rss_feeds": [
+        {
+            "feed_name": "Legal Advice",
+            "url": "https://www.manilatimes.net/legal-advice/feed/"
+        },
+        {
+            "feed_name": "News",
+            "url": "https://www.manilatimes.net/news/feed/"
+        },
+        {
+            "feed_name": "National News",
+            "url": "https://www.manilatimes.net/news/national/feed/"
+        },
+        {
+            "feed_name": "World News",
+            "url": "https://www.manilatimes.net/world/feed/"
+        },
+        {
+            "feed_name": "Regions",
+            "url": "https://www.manilatimes.net/regions/feed/"
+        },
+        {
+            "feed_name": "The Sunday Times",
+            "url": "https://www.manilatimes.net/the-sunday-times/feed/"
+        },
+        {
+            "feed_name": "Arts Awake",
+            "url": "https://www.manilatimes.net/the-sunday-times/arts-awake/feed/"
+        },
+        {
+            "feed_name": "Literary Life",
+            "url": "https://www.manilatimes.net/the-sunday-times/literary-life/feed/"
+        },
+        {
+            "feed_name": "People",
+            "url": "https://www.manilatimes.net/the-sunday-times/people/feed/"
+        },
+        {
+            "feed_name": "Cover Story",
+            "url": "https://www.manilatimes.net/the-sunday-times/cover-story/feed/"
+        },
+        {
+            "feed_name": "Business",
+            "url": "https://www.manilatimes.net/business/feed/"
+        },
+        {
+            "feed_name": "Agribusiness",
+            "url": "https://www.manilatimes.net/business/agribusiness/feed/"
+        },
+        {
+            "feed_name": "Boardroom Watch",
+            "url": "https://www.manilatimes.net/business/boardroom-watch/feed/"
+        }
+    ]
+}
