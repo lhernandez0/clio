@@ -25,5 +25,8 @@ docker-run: # Run docker-compose build up
 db: # Set up PostgreSQL for Airflow in dev
 	docker run --name airflow-postgres -e POSTGRES_USER=airflow -e POSTGRES_PASSWORD=airflow -e POSTGRES_DB=airflow -p 5432:5432 -d postgres:latest
 
+test: # Run tests
+	venv/bin/pytest -vv
+
 help: # Show this help
 	@awk 'BEGIN {FS = ":.*?# "} /^[a-zA-Z_-]+:.*?# .*$$/ {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
