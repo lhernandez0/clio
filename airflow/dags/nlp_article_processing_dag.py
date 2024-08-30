@@ -86,7 +86,7 @@ dag = DAG(
     "nlp_article_processing_dag",
     default_args=default_args,
     description="A DAG to process articles with NLP tasks from RSS feeds",
-    schedule_interval=timedelta(minutes=60),  # Runs every hour
+    schedule_interval="30 * * * *",  # Runs every hour at 30th minute
 )
 
 nlp_processing_task = PythonOperator(
