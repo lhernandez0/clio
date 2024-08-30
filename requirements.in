@@ -10,5 +10,6 @@ elasticsearch
 feedparser
 langdetect
 psycopg2-binary
-spacy 
+spacy
+spacytextblob
 textblob 

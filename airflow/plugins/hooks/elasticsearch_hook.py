@@ -47,3 +47,28 @@ class ElasticsearchHook:
                 e,
             )
             raise
+
+    def get_new_articles(self, index, doc_type="_doc", size=10000):
+        query = {"query": {"bool": {"must_not": {"exists": {"field": "nlp_processed"}}}}}
+        try:
+            result = self.es.search(index=index, body=query, size=size)
+            return result["hits"]["hits"]
+        except Exception as e:
+            self.logger.error(
+                "Failed to retrieve new articles from index: %s. Error: %s",
+                index,
+                e,
+            )
+            raise
+
+    def update_article(self, index, id, body):
+        try:
+            self.es.update(index=index, id=id, body={"doc": body})
+        except Exception as e:
+            self.logger.error(
+                "Failed to update article in index: %s, id: %s. Error: %s",
+                index,
+                id,
+                e,
+            )
+            raise
