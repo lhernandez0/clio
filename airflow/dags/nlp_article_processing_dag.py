@@ -1,11 +1,15 @@
 import logging
+import os
 from datetime import datetime, timedelta
 
 import spacy
+from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
+from airflow.sensors.external_task import ExternalTaskSensor
 from hooks.elasticsearch_hook import ElasticsearchHook
 from spacy.language import Language
 from spacytextblob.spacytextblob import SpacyTextBlob  # noqa: F401
+from utils.utils import generate_dag_list
 
 from airflow import DAG
 
@@ -83,15 +87,53 @@ def process_articles_with_nlp():
             logger.error(f"Error processing article ID: {article['_id']}, Error: {e}")
 
 
+# Define the DAG
+config_dir = os.path.join(os.getcwd(), "config", "news_outlets")
+rss_ingestion_dag_ids = generate_dag_list(config_dir)
+
 dag = DAG(
     "nlp_article_processing_dag",
     default_args=default_args,
     description="A DAG to process articles with NLP tasks from RSS feeds",
-    schedule_interval="30 * * * *",  # Runs every hour at 30th minute
+    schedule_interval="0 * * * *",  # Runs at the start of every hour
 )
 
+# Create a list to hold the sensors
+sensors = []
+
+# Add ExternalTaskSensors to ensure the DAG waits for all specified RSS ingestion DAGs to complete
+for dag_id, _ in rss_ingestion_dag_ids:
+    sensor_task_id = f"wait_for_{dag_id}_completion"
+
+    sensor = ExternalTaskSensor(
+        task_id=sensor_task_id,
+        external_dag_id=dag_id,
+        external_task_id=None,  # None means wait for the whole DAG
+        mode="poke",
+        timeout=900,  # Wait for 15 minutes
+        poke_interval=60,  # Check every 60 seconds
+        dag=dag,
+    )
+
+    sensors.append(sensor)
+
+# Define a EmptyOperator to serve as a downstream task for sensors
+waiting_end_sensor = EmptyOperator(
+    task_id="waiting_end_sensor",
+    dag=dag,
+    trigger_rule="all_done",  # Runs when all upstream tasks are done
+)
+
+# Define the nlp_processing_task
 nlp_processing_task = PythonOperator(
     task_id="process_articles_with_nlp_task",
     python_callable=process_articles_with_nlp,
     dag=dag,
 )
+
+# Set dependencies
+for sensor in sensors:
+    sensor >> waiting_end_sensor
+
+# Ensure nlp_processing_task runs after all sensors (regardless of their status)
+waiting_end_sensor >> nlp_processing_task

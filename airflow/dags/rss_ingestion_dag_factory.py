@@ -4,6 +4,7 @@ import os
 from datetime import datetime, timedelta
 
 from operators.rss_feed_operator import FetchRSSFeedOperator
+from utils.utils import generate_dag_list
 
 from airflow import DAG
 
@@ -78,9 +79,8 @@ def create_dag(dag_id, json_file):
 
 # Iterate over all JSON files in the config directory and create a DAG for each
 config_dir = os.path.join(os.getcwd(), "config", "news_outlets")
-for file_name in os.listdir(config_dir):
-    if file_name.endswith(".json"):
-        file_path = os.path.join(config_dir, file_name)
-        logger.info("Processing JSON file: %s", file_path)
-        dag_id = f"{file_name.replace('.json', '')}_rss_ingestion_dag"
-        globals()[dag_id] = create_dag(dag_id, file_path)
+dag_list = generate_dag_list(config_dir)
+
+# Create and register each DAG
+for dag_id, file_path in dag_list:
+    globals()[dag_id] = create_dag(dag_id, file_path)
