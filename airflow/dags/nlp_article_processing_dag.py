@@ -5,6 +5,7 @@ import spacy
 from airflow.operators.python import PythonOperator
 from hooks.elasticsearch_hook import ElasticsearchHook
 from spacy.language import Language
+from spacytextblob.spacytextblob import SpacyTextBlob  # noqa: F401
 
 from airflow import DAG
 
