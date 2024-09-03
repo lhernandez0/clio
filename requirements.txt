@@ -12,6 +12,7 @@ aiohttp==3.10.3
     # via
     #   -c airflow-constraints.txt
     #   apache-airflow-providers-http
+    #   elasticsearch
 aiosignal==1.3.1
     # via
     #   -c airflow-constraints.txt
@@ -184,7 +185,7 @@ clickclick==20.10.2
     # via
     #   -c airflow-constraints.txt
     #   connexion
-cloudpathlib==0.18.1
+cloudpathlib==0.19.0
     # via weasel
 colorama==0.4.6
     # via
@@ -252,14 +253,21 @@ elastic-transport==8.13.1
     # via
     #   -c airflow-constraints.txt
     #   elasticsearch
-elasticsearch==8.14.0
+elasticsearch[async]==8.14.0
     # via
     #   -c airflow-constraints.txt
     #   -r requirements.in
+    #   elasticsearch-dsl
+elasticsearch-dsl[async]==8.15.1
+    # via -r requirements.in
 email-validator==2.2.0
     # via
     #   -c airflow-constraints.txt
     #   flask-appbuilder
+en-core-web-md @ https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.7.0/en_core_web_md-3.7.0.tar.gz
+    # via -r requirements.in
+en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.0/en_core_web_sm-3.7.0.tar.gz
+    # via -r requirements.in
 feedparser==6.0.11
     # via -r requirements.in
 filelock==3.15.4
@@ -669,6 +677,7 @@ python-dateutil==2.9.0.post0
     #   apache-airflow
     #   celery
     #   croniter
+    #   elasticsearch-dsl
     #   flask-appbuilder
     #   pendulum
     #   time-machine
@@ -770,6 +779,8 @@ sniffio==1.3.1
 spacy==3.7.6
     # via
     #   -r requirements.in
+    #   en-core-web-md
+    #   en-core-web-sm
     #   spacytextblob
 spacy-legacy==3.0.12
     # via spacy
@@ -848,6 +859,7 @@ typing-extensions==4.12.2
     # via
     #   -c airflow-constraints.txt
     #   alembic
+    #   elasticsearch-dsl
     #   flask-limiter
     #   limits
     #   opentelemetry-sdk
