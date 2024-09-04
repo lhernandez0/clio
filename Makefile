@@ -13,6 +13,20 @@ dev: reqs # Run reqs and install dependencies
 	venv/bin/pip install -r requirements.txt --no-cache-dir
 	venv/bin/pre-commit install
 
+VENV_PATH := $(shell venv/bin/python -c "import site; print(site.getsitepackages()[0])")
+PLUGINS_PATH := $(shell pwd)/airflow/plugins
+PTH_FILE := $(VENV_PATH)/airflow_plugins.pth
+
+setup_plugins: # Add plugins path to site-packages
+	@echo "Creating .pth file in site-packages directory..."
+	@echo $(PLUGINS_PATH) > $(PTH_FILE)
+	@echo ".pth file created at $(PTH_FILE)"
+
+venv: # Create virtual environment
+	`which python3` -m venv venv
+	venv/bin/pip install -U pip pip-tools wheel --no-cache-dir
+	setup_plugins
+
 run: # Run fastapi service for dev
 	uvicorn app.main:app --reload
 
