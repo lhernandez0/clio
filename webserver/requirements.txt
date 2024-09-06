@@ -1,0 +1,11 @@
+--extra-index-url https://download.pytorch.org/whl/cpu/
+elasticsearch-dsl[async]==8.15.2
+elasticsearch[async]==8.14.0
+en-core-web-md @ https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.7.0/en_core_web_md-3.7.0.tar.gz
+en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.0/en_core_web_sm-3.7.0.tar.gz
+fastapi==0.112.2
+gunicorn==23.0.0
+sentence-transformers==3.0.1
+spacy==3.7.6
+transformers[torch]==4.44.2
+uvicorn==0.30.6

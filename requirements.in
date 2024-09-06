@@ -8,6 +8,7 @@ pre-commit
 apache-airflow[celery]
 elasticsearch
 elasticsearch-dsl[async]
+fastapi
 feedparser
 langdetect
 psycopg2-binary
@@ -15,6 +16,7 @@ sentence-transformers
 --extra-index-url https://download.pytorch.org/whl/cpu/
 torch
 transformers[torch]
+uvicorn
 
 # spacy
 spacy~=3.7.6

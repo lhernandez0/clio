@@ -37,6 +37,7 @@ anyio==4.4.0
     # via
     #   -c airflow-constraints.txt
     #   httpx
+    #   starlette
 apache-airflow[celery]==2.10.0
     # via
     #   -r requirements.in
@@ -172,6 +173,7 @@ click==8.1.7
     #   flask
     #   flask-appbuilder
     #   typer
+    #   uvicorn
 click-didyoumean==0.3.1
     # via
     #   -c airflow-constraints.txt
@@ -261,7 +263,7 @@ elasticsearch[async]==8.14.0
     #   -c airflow-constraints.txt
     #   -r requirements.in
     #   elasticsearch-dsl
-elasticsearch-dsl[async]==8.15.1
+elasticsearch-dsl[async]==8.15.2
     # via -r requirements.in
 email-validator==2.2.0
     # via
@@ -270,6 +272,8 @@ email-validator==2.2.0
 en-core-web-md @ https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.7.0/en_core_web_md-3.7.0.tar.gz
     # via -r requirements.in
 en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.0/en_core_web_sm-3.7.0.tar.gz
+    # via -r requirements.in
+fastapi==0.112.2
     # via -r requirements.in
 feedparser==6.0.11
     # via -r requirements.in
@@ -376,6 +380,7 @@ h11==0.14.0
     # via
     #   -c airflow-constraints.txt
     #   httpcore
+    #   uvicorn
 httpcore==1.0.5
     # via
     #   -c airflow-constraints.txt
@@ -681,6 +686,7 @@ pydantic==2.8.2
     # via
     #   -c airflow-constraints.txt
     #   confection
+    #   fastapi
     #   spacy
     #   thinc
     #   weasel
@@ -862,6 +868,8 @@ srsly==2.4.8
     #   spacy
     #   thinc
     #   weasel
+starlette==0.38.4
+    # via fastapi
 sympy==1.13.2
     # via
     #   -c airflow-constraints.txt
@@ -892,7 +900,7 @@ time-machine==2.15.0
     #   pendulum
 tokenizers==0.19.1
     # via transformers
-torch==2.4.0+cpu
+torch==2.4.1+cpu
     # via
     #   -r requirements.in
     #   accelerate
@@ -922,6 +930,7 @@ typing-extensions==4.12.2
     #   -c airflow-constraints.txt
     #   alembic
     #   elasticsearch-dsl
+    #   fastapi
     #   flask-limiter
     #   huggingface-hub
     #   limits
@@ -952,6 +961,8 @@ urllib3==2.2.2
     #   -c airflow-constraints.txt
     #   elastic-transport
     #   requests
+uvicorn==0.30.6
+    # via -r requirements.in
 vine==5.1.0
     # via
     #   -c airflow-constraints.txt
