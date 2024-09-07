@@ -18,23 +18,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-# Define custom component to filter entities
-def filter_entities(doc):
-    RELEVANT_LABELS = {
-        "PERSON",
-        "ORG",
-        "GPE",
-        "LOC",
-        # "DATE", # Removing DATE due to noise
-        "EVENT",
-        "MONEY",
-        "PRODUCT",
-        "WORK_OF_ART",
-    }
-    doc.ents = [ent for ent in doc.ents if ent.label_ in RELEVANT_LABELS]
-    return doc
-
-
 class FetchRSSFeedOperator(BaseOperator):
 
     @apply_defaults

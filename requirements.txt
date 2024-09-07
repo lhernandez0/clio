@@ -6,7 +6,7 @@
 #
 --extra-index-url https://download.pytorch.org/whl/cpu/
 
-accelerate==0.34.0
+accelerate==0.34.2
     # via transformers
 aiohappyeyeballs==2.3.5
     # via
@@ -38,7 +38,7 @@ anyio==4.4.0
     #   -c airflow-constraints.txt
     #   httpx
     #   starlette
-apache-airflow[celery]==2.10.0
+apache-airflow[celery]==2.10.1
     # via
     #   -r requirements.in
     #   apache-airflow-providers-celery
@@ -118,6 +118,10 @@ babel==2.16.0
     # via
     #   -c airflow-constraints.txt
     #   flask-babel
+beautifulsoup4==4.12.3
+    # via
+    #   -c airflow-constraints.txt
+    #   -r requirements.in
 billiard==4.2.0
     # via
     #   -c airflow-constraints.txt
@@ -273,7 +277,7 @@ en-core-web-md @ https://github.com/explosion/spacy-models/releases/download/en_
     # via -r requirements.in
 en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.0/en_core_web_sm-3.7.0.tar.gz
     # via -r requirements.in
-fastapi==0.112.2
+fastapi==0.113.0
     # via -r requirements.in
 feedparser==6.0.11
     # via -r requirements.in
@@ -794,7 +798,7 @@ rpds-py==0.20.0
     #   -c airflow-constraints.txt
     #   jsonschema
     #   referencing
-safetensors==0.4.4
+safetensors==0.4.5
     # via
     #   accelerate
     #   transformers
@@ -831,6 +835,10 @@ sniffio==1.3.1
     #   -c airflow-constraints.txt
     #   anyio
     #   httpx
+soupsieve==2.5
+    # via
+    #   -c airflow-constraints.txt
+    #   beautifulsoup4
 spacy==3.7.6
     # via
     #   -r requirements.in

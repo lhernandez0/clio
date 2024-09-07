@@ -1,6 +1,7 @@
 from typing import Any, Dict, List
 
 import spacy
+from bs4 import BeautifulSoup
 from elasticsearch_dsl import (
     Boolean,
     Date,
@@ -23,6 +24,14 @@ embedding_model = SentenceTransformer(
     "all-MiniLM-L6-v2", device="cpu"
 )  # Ensure CPU usage
 nlp = spacy.load("en_core_web_md")  # Load the spaCy model
+
+
+def clean_summary(summary):
+    # Parse the HTML content
+    soup = BeautifulSoup(summary, "html.parser")
+    # Extract text, removing all HTML tags
+    cleaned_text = soup.get_text(separator=" ")
+    return cleaned_text
 
 
 class Article(Document):
@@ -52,8 +61,25 @@ class Article(Document):
             # Use SentenceTransformers for embeddings
             self.embedding = embedding_model.encode(self.summary).tolist()
 
+            # Clean the summary text
+            self.summary = clean_summary(self.summary)
+
             # Process entities with spaCy
             doc = nlp(self.summary)
-            self.entities = [{"text": ent.text, "label": ent.label_} for ent in doc.ents]
+            relevant_labels = {
+                "PERSON",
+                "ORG",
+                "GPE",
+                "LOC",
+                "EVENT",
+                "MONEY",
+                "PRODUCT",
+                "WORK_OF_ART",
+            }
+            self.entities = [
+                {"text": ent.text, "label": ent.label_}
+                for ent in doc.ents
+                if ent.label_ in relevant_labels
+            ]
 
             self.nlp_processed = True

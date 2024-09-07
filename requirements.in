@@ -6,6 +6,7 @@ pre-commit
 
 # release
 apache-airflow[celery]
+beautifulsoup4
 elasticsearch
 elasticsearch-dsl[async]
 fastapi
