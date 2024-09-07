@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 import spacy
 from elasticsearch_dsl import Q, Search
 from sentence_transformers import SentenceTransformer
@@ -74,3 +76,24 @@ def text_search(query: str, start_date: str, end_date: str):
         for hit in response
     ]
     return results
+
+
+def get_trending_entities(
+    index="rss_feeds", field="entities.text.keyword", days=1, size=10
+):
+    # Define the time range (e.g., last 24 hours)
+    start_date = (datetime.now() - timedelta(days=days)).isoformat()
+    end_date = datetime.now().isoformat()
+
+    # Build the search query
+    s = Search(index=index)
+    s = s.filter("range", published={"gte": start_date, "lte": end_date})
+
+    # Add the aggregation
+    s.aggs.bucket("trending_entities", "terms", field=field, size=size)
+
+    # Execute the search
+    response = s.execute()
+
+    # Return the buckets from the aggregation
+    return response.aggregations.trending_entities.buckets

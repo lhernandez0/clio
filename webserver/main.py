@@ -5,7 +5,7 @@ from fastapi import FastAPI, Query
 from fastapi.responses import RedirectResponse
 
 from webserver.config import get_es_connection
-from webserver.services import semantic_search, text_search
+from webserver.services import get_trending_entities, semantic_search, text_search
 from webserver.utils import get_default_dates
 
 
@@ -43,6 +43,17 @@ async def text_search_endpoint(
         start_date, end_date = get_default_dates()
 
     results = text_search(query, start_date, end_date)
+    return {"results": results}
+
+
+@app.get("/search/trending/")
+async def trending_entities_endpoint(
+    days: int = Query(
+        default=1, description="Number of days to consider for trending entities"
+    ),
+    size: int = Query(default=10, description="Number of trending entities to return"),
+):
+    results = get_trending_entities(days=days, size=size)
     return {"results": results}
 
 
