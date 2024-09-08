@@ -1,8 +1,16 @@
 from datetime import datetime, timedelta
+from typing import List
 
 import spacy
 from elasticsearch_dsl import Q, Search
 from sentence_transformers import SentenceTransformer
+
+from common.utils.logger import setup_logging
+from webserver.clients import get_openai_client
+from webserver.config import get_prompts
+
+# Set up logging
+logger = setup_logging()
 
 # Load NLP models
 nlp = spacy.load("en_core_web_md")
@@ -33,7 +41,7 @@ def semantic_search(query: str, start_date: str, end_date: str, page: int, size:
         from_value : from_value + size
     ]  # Use slicing for pagination
 
-    # print(s.to_dict())  # Debug: print the query
+    logger.debug(s.to_dict())
 
     response = s.execute()
 
@@ -68,7 +76,7 @@ def text_search(query: str, start_date: str, end_date: str, page: int, size: int
         ]  # Use slicing for pagination
     )
 
-    print(s.to_dict())  # Debug: print the query
+    logger.debug(s.to_dict())
 
     response = s.execute()
 
@@ -108,3 +116,61 @@ def get_trending_entities(
 
     # Return the buckets from the aggregation
     return response.aggregations.trending_entities.buckets
+
+
+# Async function to stream the ChatGPT response
+async def stream_chatgpt_response(
+    messages: List[dict], stream: bool = True, es_context: List = [dict]
+) -> str:
+    openai_client = await get_openai_client()
+    if openai_client is None:
+        logger.error("OpenAI client is not initialized.")
+        raise ValueError("OpenAI client is not initialized.")
+
+    # Get prompts from config
+    prompts = get_prompts()
+
+    # Insert system instructions at the beginning
+    messages.insert(0, {"role": "system", "content": prompts["system_instructions"]})
+
+    # Insert context about current date and time
+    current_datetime = datetime.now().strftime("%A, %d %B %Y %I:%M %p")
+    date_time_context = "It's currently " + current_datetime
+    messages.insert(1, {"role": "system", "content": date_time_context})
+
+    # logger.info(f"ChatGPT request: {messages}")
+    for message in messages:
+        logger.info(f"ChatGPT request: {message}")
+
+    # Add the ES context to the messages
+    if es_context:
+        es_content = prompts["es_context_prompt"]
+        es_content = es_content.format(
+            articles="\n\n".join(
+                [
+                    f"- Title: {hit['title']}\n  Summary: {hit['summary']}\n  Link: {hit['link']}\n  Published: {hit['published']}\n  Source: {hit['source']}"
+                    for hit in es_context
+                ]
+            )
+        )
+        messages.append({"role": "system", "content": es_content})
+    else:
+        # No ES articles found
+        messages.append({"role": "system", "content": prompts["no_es_context_prompt"]})
+
+    # Add the safety prompt
+    messages.append({"role": "system", "content": prompts["safety_prompt"]})
+
+    stream = await openai_client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=messages,
+        stream=stream,
+    )
+
+    response = ""
+    async for chunk in stream:
+        response += chunk.choices[0].delta.content or ""
+
+    logger.info(f"ChatGPT response: {response}")
+
+    return response

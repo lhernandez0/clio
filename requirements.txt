@@ -37,6 +37,7 @@ anyio==4.4.0
     # via
     #   -c airflow-constraints.txt
     #   httpx
+    #   openai
     #   starlette
 apache-airflow[celery]==2.10.1
     # via
@@ -250,6 +251,10 @@ distlib==0.3.8
     # via
     #   -c airflow-constraints.txt
     #   virtualenv
+distro==1.9.0
+    # via
+    #   -c airflow-constraints.txt
+    #   openai
 dnspython==2.6.1
     # via
     #   -c airflow-constraints.txt
@@ -277,7 +282,7 @@ en-core-web-md @ https://github.com/explosion/spacy-models/releases/download/en_
     # via -r requirements.in
 en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.0/en_core_web_sm-3.7.0.tar.gz
     # via -r requirements.in
-fastapi==0.113.0
+fastapi==0.114.0
     # via -r requirements.in
 feedparser==6.0.11
     # via -r requirements.in
@@ -393,6 +398,7 @@ httpx==0.27.0
     # via
     #   -c airflow-constraints.txt
     #   apache-airflow
+    #   openai
 huggingface-hub==0.24.6
     # via
     #   accelerate
@@ -444,6 +450,10 @@ jinja2==3.1.4
     #   python-nvd3
     #   spacy
     #   torch
+jiter==0.5.0
+    # via
+    #   -c airflow-constraints.txt
+    #   openai
 jmespath==0.10.0
     # via
     #   -c airflow-constraints.txt
@@ -570,6 +580,10 @@ numpy==1.26.4
     #   spacy
     #   thinc
     #   transformers
+openai==1.40.3
+    # via
+    #   -c airflow-constraints.txt
+    #   -r requirements.in
 opentelemetry-api==1.26.0
     # via
     #   -c airflow-constraints.txt
@@ -691,6 +705,7 @@ pydantic==2.8.2
     #   -c airflow-constraints.txt
     #   confection
     #   fastapi
+    #   openai
     #   spacy
     #   thinc
     #   weasel
@@ -835,6 +850,7 @@ sniffio==1.3.1
     #   -c airflow-constraints.txt
     #   anyio
     #   httpx
+    #   openai
 soupsieve==2.5
     # via
     #   -c airflow-constraints.txt
@@ -922,6 +938,7 @@ tqdm==4.66.5
     # via
     #   -c airflow-constraints.txt
     #   huggingface-hub
+    #   openai
     #   sentence-transformers
     #   spacy
     #   transformers
@@ -942,6 +959,7 @@ typing-extensions==4.12.2
     #   flask-limiter
     #   huggingface-hub
     #   limits
+    #   openai
     #   opentelemetry-sdk
     #   pydantic
     #   pydantic-core

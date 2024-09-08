@@ -27,3 +27,4 @@ EXPOSE 8000
 
 # Run the FastAPI app with gunicorn and uvicorn workers
 CMD ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000", "webserver.main:app"]
+# CMD ["sh"]

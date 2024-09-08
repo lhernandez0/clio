@@ -1,18 +1,34 @@
-from datetime import date
+from contextlib import asynccontextmanager
+from datetime import date, timedelta
 from typing import Optional
 
 from fastapi import FastAPI, Query
 from fastapi.responses import RedirectResponse
 
+from common.utils.logger import setup_logging
+from models.openai import ChatRequest
+from webserver import clients
 from webserver.config import get_es_connection
-from webserver.services import get_trending_entities, semantic_search, text_search
+from webserver.services import (
+    get_trending_entities,
+    semantic_search,
+    stream_chatgpt_response,
+    text_search,
+)
 from webserver.utils import get_default_dates
 
+# Set up logging
+logger = setup_logging()
 
-async def lifespan(app: FastAPI):
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
     # Startup event
     get_es_connection()
+    await clients.openai_client_setup()
     yield
+    # Shutdown event
+    await clients.open_ai_client_teardown()
 
 
 app = FastAPI(lifespan=lifespan)
@@ -59,6 +75,31 @@ async def trending_entities_endpoint(
 ):
     results = get_trending_entities(days=days, size=size)
     return {"results": results}
+
+
+@app.post("/chat/")
+async def chatgpt_with_messages(request: ChatRequest, stream: bool = True):
+    # Prepare the messages to send to ChatGPT
+    messages = [{"role": msg.role, "content": msg.content} for msg in request.messages]
+
+    # Get context from semantic_search_endpoint with 1 year date range
+    start_date = date.today() - timedelta(days=365)
+    end_date = date.today()
+    logger.info(f"Semantic search query: {request.messages[-1].content}")
+    semantic_search_results = semantic_search(
+        query=request.messages[-1].content,
+        start_date=start_date,
+        end_date=end_date,
+        page=1,
+        size=5,
+    )
+    logger.info(f"semantic_search_results: {semantic_search_results}")
+    # Get streamed response from ChatGPT
+    chat_response = await stream_chatgpt_response(
+        messages, stream=stream, es_context=semantic_search_results
+    )
+
+    return {"chat_response": chat_response}
 
 
 # Redirect root URL to Swagger UI
