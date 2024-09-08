@@ -9,13 +9,17 @@ nlp = spacy.load("en_core_web_md")
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2", device="cpu")
 
 
-def semantic_search(query: str, start_date: str, end_date: str):
+def semantic_search(query: str, start_date: str, end_date: str, page: int, size: int):
     # Perform semantic search using Hugging Face and SentenceTransformers
     vector = embedding_model.encode(query).tolist()
+
+    # Calculate the offset for pagination
+    from_value = (page - 1) * size
 
     # Create the date range filter
     date_filter = Q("range", published={"gte": start_date, "lte": end_date})
 
+    # Build the search query with pagination using slicing
     s = Search(index="rss_feeds").query(
         Q(
             "knn",
@@ -23,9 +27,11 @@ def semantic_search(query: str, start_date: str, end_date: str):
             k=5,
             num_candidates=10,
             query_vector=vector,
-            filter=date_filter,  # Apply date filter as a pre-filter
+            filter=date_filter,
         )
-    )
+    )[
+        from_value : from_value + size
+    ]  # Use slicing for pagination
 
     # print(s.to_dict())  # Debug: print the query
 
@@ -49,13 +55,18 @@ def semantic_search(query: str, start_date: str, end_date: str):
     return results
 
 
-def text_search(query: str, start_date: str, end_date: str):
+def text_search(query: str, start_date: str, end_date: str, page: int, size: int):
+    # Calculate the offset for pagination
+    from_value = (page - 1) * size
+
     # Perform text search using Elasticsearch DSL
     s = (
         Search(index="rss_feeds")
         .query("match", summary=query)
-        .filter("range", published={"gte": start_date, "lte": end_date})
-    )  # Add date range filter
+        .filter("range", published={"gte": start_date, "lte": end_date})[
+            from_value : from_value + size
+        ]  # Use slicing for pagination
+    )
 
     print(s.to_dict())  # Debug: print the query
 

@@ -21,6 +21,8 @@ app = FastAPI(lifespan=lifespan)
 @app.get("/search/semantic/")
 async def semantic_search_endpoint(
     query: str,
+    page: Optional[int] = Query(default=1, ge=1),
+    size: Optional[int] = Query(default=10, ge=1),
     start_date: Optional[date] = Query(default=None),
     end_date: Optional[date] = Query(default=None),
 ):
@@ -28,13 +30,15 @@ async def semantic_search_endpoint(
     if not start_date or not end_date:
         start_date, end_date = get_default_dates()
 
-    results = semantic_search(query, start_date, end_date)
+    results = semantic_search(query, start_date, end_date, page, size)
     return {"results": results}
 
 
 @app.get("/search/text/")
 async def text_search_endpoint(
     query: str,
+    page: Optional[int] = Query(default=1, ge=1),
+    size: Optional[int] = Query(default=10, ge=1),
     start_date: Optional[date] = Query(default=None),
     end_date: Optional[date] = Query(default=None),
 ):
@@ -42,7 +46,7 @@ async def text_search_endpoint(
     if not start_date or not end_date:
         start_date, end_date = get_default_dates()
 
-    results = text_search(query, start_date, end_date)
+    results = text_search(query, start_date, end_date, page, size)
     return {"results": results}
 
 
