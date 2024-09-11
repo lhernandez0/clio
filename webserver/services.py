@@ -3,6 +3,7 @@ from typing import List
 
 import spacy
 from elasticsearch_dsl import Q, Search
+from fastapi import WebSocket
 from sentence_transformers import SentenceTransformer
 
 from common.utils.logger import setup_logging
@@ -118,9 +119,12 @@ def get_trending_entities(
     return response.aggregations.trending_entities.buckets
 
 
-# Async function to stream the ChatGPT response
+# Update stream_chatgpt_response to handle both WebSockets and regular requests
 async def stream_chatgpt_response(
-    messages: List[dict], stream: bool = True, es_context: List = [dict]
+    messages: List[dict],
+    stream: bool = True,
+    es_context: List = None,
+    websocket: WebSocket = None,
 ) -> str:
     openai_client = await get_openai_client()
     if openai_client is None:
@@ -140,10 +144,11 @@ async def stream_chatgpt_response(
 
     # logger.info(f"ChatGPT request: {messages}")
     for message in messages:
-        logger.info(f"ChatGPT request: {message}")
+        logger.debug(f"ChatGPT request: {message}")
 
     # Add the ES context to the messages
     if es_context:
+        logger.info(f"Using ES context with {len(es_context)} articles.")
         es_content = prompts["es_context_prompt"]
         es_content = es_content.format(
             articles="\n\n".join(
@@ -161,6 +166,7 @@ async def stream_chatgpt_response(
     # Add the safety prompt
     messages.append({"role": "system", "content": prompts["safety_prompt"]})
 
+    logger.info(f"ChatGPT request: {messages}")
     stream = await openai_client.chat.completions.create(
         model="gpt-4o-mini",
         messages=messages,
@@ -169,8 +175,14 @@ async def stream_chatgpt_response(
 
     response = ""
     async for chunk in stream:
-        response += chunk.choices[0].delta.content or ""
+        content = chunk.choices[0].delta.content or ""
 
-    logger.info(f"ChatGPT response: {response}")
+        # If WebSocket is provided, stream each chunk over WebSocket
+        if websocket:
+            await websocket.send_text(content)
+        else:
+            response += content
 
-    return response
+    if not websocket:
+        logger.info(f"ChatGPT response: {response}")
+        return response

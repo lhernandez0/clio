@@ -2,8 +2,9 @@ from contextlib import asynccontextmanager
 from datetime import date, timedelta
 from typing import Optional
 
-from fastapi import FastAPI, Query
-from fastapi.responses import RedirectResponse
+from fastapi import FastAPI, Query, WebSocket
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from common.utils.logger import setup_logging
 from models.openai import ChatRequest
@@ -32,6 +33,9 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+# Mount the static files directory
+app.mount("/static", StaticFiles(directory="webserver/static"), name="static")
 
 
 @app.get("/search/semantic/")
@@ -85,7 +89,7 @@ async def chatgpt_with_messages(request: ChatRequest, stream: bool = True):
     # Get context from semantic_search_endpoint with 1 year date range
     start_date = date.today() - timedelta(days=365)
     end_date = date.today()
-    logger.info(f"Semantic search query: {request.messages[-1].content}")
+    logger.debug(f"Semantic search query: {request.messages[-1].content}")
     semantic_search_results = semantic_search(
         query=request.messages[-1].content,
         start_date=start_date,
@@ -93,7 +97,7 @@ async def chatgpt_with_messages(request: ChatRequest, stream: bool = True):
         page=1,
         size=5,
     )
-    logger.info(f"semantic_search_results: {semantic_search_results}")
+    logger.debug(f"semantic_search_results: {semantic_search_results}")
     # Get streamed response from ChatGPT
     chat_response = await stream_chatgpt_response(
         messages, stream=stream, es_context=semantic_search_results
@@ -102,10 +106,56 @@ async def chatgpt_with_messages(request: ChatRequest, stream: bool = True):
     return {"chat_response": chat_response}
 
 
-# Redirect root URL to Swagger UI
+# WebSocket route for streaming ChatGPT responses
+@app.websocket("/ws/chat/")
+async def chatgpt_with_messages_websocket(websocket: WebSocket):
+    await websocket.accept()
+
+    try:
+        # Receive the request messages from the WebSocket
+        data = await websocket.receive_json()
+
+        # Prepare the messages to send to ChatGPT
+        messages = [
+            {"role": msg["role"], "content": msg["content"]} for msg in data["messages"]
+        ]
+
+        # Perform semantic search as in the POST route
+        start_date = date.today() - timedelta(days=365)
+        end_date = date.today()
+        logger.info(f"Semantic search query: {messages[-1]['content']}")
+        semantic_search_results = semantic_search(
+            query=messages[-1]["content"],
+            start_date=start_date,
+            end_date=end_date,
+            page=1,
+            size=5,
+        )
+        logger.debug(f"semantic_search_results: {semantic_search_results}")
+
+        # Stream the ChatGPT response via WebSocket
+        async for chunk in stream_chatgpt_response(
+            messages, stream=True, es_context=semantic_search_results, websocket=websocket
+        ):
+            # Send each chunk through the WebSocket
+            await websocket.send_text(chunk)
+    except Exception as e:
+        logger.error(f"Error in WebSocket: {e}")
+        await websocket.send_text("An error occurred.")
+    finally:
+        await websocket.close()
+
+
+# # Redirect root URL to Swagger UI
+# @app.get("/")
+# async def root():
+#     return RedirectResponse(url="/docs")
+
+
+# Serve the main HTML file at the root
 @app.get("/")
-async def root():
-    return RedirectResponse(url="/docs")
+async def read_root():
+    return FileResponse("webserver/static/index.html")
 
 
 if __name__ == "__main__":

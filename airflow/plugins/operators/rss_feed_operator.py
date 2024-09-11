@@ -103,9 +103,6 @@ class FetchRSSFeedOperator(BaseOperator):
                 f"Network error when fetching feed {self.feed_url}: {str(e)}"
             )
             raise
-        except feedparser.FeedParserError as e:
-            self.logger.error(f"Error parsing feed {self.feed_url}: {str(e)}")
-            raise
         except Exception as e:
             self.logger.error(
                 f"Unexpected error processing feed {self.feed_url}: {str(e)}"
