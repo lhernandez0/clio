@@ -1,94 +1,21 @@
 import logging
 from datetime import datetime
-from typing import Any, Dict, List
 
 import feedparser
-import spacy
 from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 from elasticsearch import ConnectionError, NotFoundError, TransportError
 from elasticsearch.helpers import BulkIndexError, bulk
-from elasticsearch_dsl import (
-    Boolean,
-    Date,
-    DenseVector,
-    Document,
-    Float,
-    Keyword,
-    Nested,
-    Text,
-)
 from hooks.elasticsearch_hook import ElasticsearchHook
 from requests.exceptions import RequestException
-from sentence_transformers import SentenceTransformer
-from transformers import pipeline
+
+from models.articles import Article
 
 # Configure logging
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
-
-# Load the sentiment analysis and embedding models
-model_name = "distilbert/distilbert-base-uncased-finetuned-sst-2-english"
-sentiment_pipeline = pipeline(
-    "sentiment-analysis", model=model_name, device=-1
-)  # device=-1 ensures CPU usage
-embedding_model = SentenceTransformer(
-    "all-MiniLM-L6-v2", device="cpu"
-)  # Ensure CPU usage
-nlp = spacy.load("en_core_web_md")  # Load the spaCy model
-
-
-# Define custom component to filter entities
-def filter_entities(doc):
-    RELEVANT_LABELS = {
-        "PERSON",
-        "ORG",
-        "GPE",
-        "LOC",
-        # "DATE", # Removing DATE due to noise
-        "EVENT",
-        "MONEY",
-        "PRODUCT",
-        "WORK_OF_ART",
-    }
-    doc.ents = [ent for ent in doc.ents if ent.label_ in RELEVANT_LABELS]
-    return doc
-
-
-class Article(Document):
-    title: str = Text()
-    link: str = Keyword()
-    published: str = Date()
-    summary: str = Text()
-    source: str = Keyword()
-    embedding: List[float] = DenseVector(dims=384, similarity="cosine")
-    nlp_processed: bool = Boolean()
-    entities: List[Dict[str, Any]] = Nested(
-        properties={"text": Text(), "label": Keyword()}
-    )
-    sentiment: float = Float()
-
-    class Index:
-        name = "rss_feeds"
-
-    def clean(self):
-        if not self.embedding:
-            # Use Hugging Face for sentiment analysis
-            sentiment_result = sentiment_pipeline(
-                self.summary[:512]
-            )  # Truncate to 512 tokens if necessary
-            self.sentiment = sentiment_result[0]["score"] if sentiment_result else 0.0
-
-            # Use SentenceTransformers for embeddings
-            self.embedding = embedding_model.encode(self.summary).tolist()
-
-            # Process entities with spaCy
-            doc = nlp(self.summary)
-            self.entities = [{"text": ent.text, "label": ent.label_} for ent in doc.ents]
-
-            self.nlp_processed = True
 
 
 class FetchRSSFeedOperator(BaseOperator):
@@ -175,9 +102,6 @@ class FetchRSSFeedOperator(BaseOperator):
             self.logger.error(
                 f"Network error when fetching feed {self.feed_url}: {str(e)}"
             )
-            raise
-        except feedparser.FeedParserError as e:
-            self.logger.error(f"Error parsing feed {self.feed_url}: {str(e)}")
             raise
         except Exception as e:
             self.logger.error(

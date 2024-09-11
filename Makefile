@@ -27,9 +27,6 @@ venv: # Create virtual environment
 	venv/bin/pip install -U pip pip-tools wheel --no-cache-dir
 	setup_plugins
 
-run: # Run fastapi service for dev
-	uvicorn app.main:app --reload
-
 docker-build: # Build docker-compose services
 	docker-compose build
 

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clio</title>
+  <style>
+    body,
+    html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .logo {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      color: #4285F4;
+    }
+
+    #searchform {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 600px;
+      max-width: 90%;
+      position: relative;
+    }
+
+    #searchbox {
+      width: 100%;
+      padding: 10px 60px 10px 20px;
+      font-size: 16px;
+      border: 1px solid #dfe1e5;
+      border-radius: 24px;
+      outline: none;
+    }
+
+    #searchbutton,
+    #askbutton {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+      font-size: 20px;
+      margin-left: 5px;
+      position: absolute;
+      right: 60px;
+      color: #007bff;
+    }
+
+    #askbutton {
+      right: 10px;
+    }
+
+    #searchbutton:hover,
+    #askbutton:hover {
+      background-color: #f1f3f4;
+      border-radius: 50%;
+    }
+
+    .results,
+    .chat-container {
+      margin-top: 20px;
+      width: 600px;
+      max-width: 90%;
+    }
+
+    #chat-history {
+      height: 300px;
+      overflow-y: auto;
+      border: 1px solid #dfe1e5;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="logo">Clio</div>
+    <form id="searchform" method="GET" action="/search">
+      <input id="searchbox" type="text" placeholder="Search or ask a question..." name="q" autocomplete="off" aria-label="Search">
+      <button id="searchbutton" type="submit" aria-label="Search">🔍</button>
+      <button id="askbutton" type="button" aria-label="Ask with AI" onclick="askAI()">🤖</button>
+    </form>
+    <div class="results" id="results"></div>
+    <div class="chat-container" id="chat-container" style="display: none;">
+      <div id="chat-history"></div>
+    </div>
+  </div>
+
+  <script>
+    const resultsContainer = document.getElementById('results');
+    const chatHistory = document.getElementById('chat-history');
+    const chatContainer = document.getElementById('chat-container');
+
+    // The form will automatically trigger the /search endpoint using GET
+    function performSearch() {
+      // You can modify this function for extra actions before the form submits if needed
+      const query = document.getElementById('searchbox').value;
+      if (query) {
+        fetch(`/search/semantic/?query=${query}`)
+          .then(response => response.json())
+          .then(data => {
+            // Check if results are available
+            if (data.results && data.results.length > 0) {
+              const formattedResults = data.results.map(result => {
+                // Assuming result contains title and content/summary properties
+                return `
+                                <div class="result-item">
+                                    <h3>${result.title}</h3>
+                                    <p>${result.summary}</p>
+                                    <p>${result.link}</p>
+                                    <p>${result.published}</p>
+                                </div>`;
+              }).join('');
+              resultsContainer.innerHTML = formattedResults;
+            } else {
+              resultsContainer.innerHTML = "<p>No results found.</p>";
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            resultsContainer.innerHTML = "<p>An error occurred while fetching search results.</p>";
+          });
+      }
+    }
+
+    // Ask AI functionality when clicking the AI button
+    function askAI() {
+      const query = document.getElementById('searchbox').value;
+      if (query) {
+        chatContainer.style.display = 'block';
+
+        const messages = [{ role: 'user', content: query }];
+
+        fetch('/chat/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ messages: messages })
+        })
+          .then(response => response.json())
+          .then(data => {
+            const responseContent = data.chat_response;
+            chatHistory.innerHTML += `<p><strong>User:</strong> ${query}</p>`;
+            chatHistory.innerHTML += `<p><strong>AI:</strong> ${responseContent}</p>`;
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            chatHistory.innerHTML += `<p>An error occurred while asking AI.</p>`;
+          });
+      }
+    }
+  </script>
+
+</body>
+
+</html>

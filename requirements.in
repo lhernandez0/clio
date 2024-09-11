@@ -6,15 +6,19 @@ pre-commit
 
 # release
 apache-airflow[celery]
+beautifulsoup4
 elasticsearch
 elasticsearch-dsl[async]
+fastapi
 feedparser
 langdetect
+openai
 psycopg2-binary
 sentence-transformers
 --extra-index-url https://download.pytorch.org/whl/cpu/
 torch
 transformers[torch]
+uvicorn
 
 # spacy
 spacy~=3.7.6

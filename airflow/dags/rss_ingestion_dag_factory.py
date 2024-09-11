@@ -39,6 +39,7 @@ def create_dag(dag_id, json_file):
         default_args=default_args,
         description=f"A DAG to ingest RSS feeds from {json_file}",
         schedule_interval=timedelta(minutes=60),  # Runs every hour
+        catchup=False,
     )
 
     with open(json_file, "r") as f:
