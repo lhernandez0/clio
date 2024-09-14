@@ -162,3 +162,4 @@ cython_debug/
 # Custom
 .envrc
 airflow/logs/*
+.github_secrets
