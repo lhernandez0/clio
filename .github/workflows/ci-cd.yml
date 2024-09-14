@@ -1,0 +1,54 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Deploy when the main branch is updated
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Set up Docker
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      # Build the Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t lhernandez0/clio:latest .
+
+      # Push Docker image to Docker Hub (optional)
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Push Docker image
+        run: |
+          docker push lhernandez0/clio:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      # Deploy to VPS using SSH
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          script: |
+            docker pull lhernandez0/clio:latest
+            docker stop clio || true
+            docker rm clio || true
+            docker run -d --name clio -p 80:8000 lhernandez0/clio:latest
