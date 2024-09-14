@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main  # Deploy when the main branch is updated
+      - main # Deploy when the main branch is updated
 
 jobs:
   build:
@@ -29,7 +29,14 @@ jobs:
       - name: Build Docker image
         run: |
           docker-compose build
-          docker tag clio:latest lhernandez0/clio:latest
+          docker tag clio_airflow-webserver:latest lhernandez0/clio_airflow-webserver:latest
+          docker tag clio_airflow-scheduler:latest lhernandez0/clio_airflow-scheduler:latest
+          docker tag clio_airflow-worker:latest lhernandez0/clio_airflow-worker:latest
+          docker tag clio_airflow-triggerer:latest lhernandez0/clio_airflow-triggerer:latest
+          docker tag clio_airflow-init:latest lhernandez0/clio_airflow-init:latest
+          docker tag clio_airflow-cli:latest lhernandez0/clio_airflow-cli:latest
+          docker tag clio_flower:latest lhernandez0/clio_flower:latest
+          docker tag clio_webserver:latest lhernandez0/clio_webserver:latest
 
       # Push Docker image to Docker Hub
       - name: Log in to Docker Hub
@@ -40,7 +47,14 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker push lhernandez0/clio:latest
+          docker push lhernandez0/clio_airflow-webserver:latest
+          docker push lhernandez0/clio_airflow-scheduler:latest
+          docker push lhernandez0/clio_airflow-worker:latest
+          docker push lhernandez0/clio_airflow-triggerer:latest
+          docker push lhernandez0/clio_airflow-init:latest
+          docker push lhernandez0/clio_airflow-cli:latest
+          docker push lhernandez0/clio_flower:latest
+          docker push lhernandez0/clio_webserver:latest
 
   deploy:
     needs: build
@@ -57,12 +71,28 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
           script: |
-            # Pull the latest Docker image
-            docker pull lhernandez0/clio:latest
+            # Clone the repository if it doesn't already exist
+            if [ ! -d "clio" ]; then
+              git clone https://github.com/lhernandez0/clio.git
+            fi
 
-            # Stop and remove old container if it exists
-            docker stop clio || true
-            docker rm clio || true
+            # Navigate to the repository directory
+            cd clio
 
-            # Run the new container
-            docker run -d --name clio -p 80:8000 lhernandez0/clio:latest
+            # Fetch the latest changes
+            git pull origin main
+
+            # Install Docker Compose if not already installed
+            if ! docker-compose --version > /dev/null 2>&1; then
+              sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+              sudo chmod +x /usr/local/bin/docker-compose
+            fi
+
+            # Pull the latest Docker images
+            docker-compose pull
+
+            # Stop and remove old containers and networks
+            docker-compose down
+
+            # Run the new containers
+            docker-compose up -d

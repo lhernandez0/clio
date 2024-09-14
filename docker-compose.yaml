@@ -120,6 +120,7 @@ services:
 
   airflow-webserver:
     <<: *airflow-common
+    image: lhernandez0/clio_airflow-webserver:latest
     command: webserver
     ports:
       - "8080:8080"
@@ -139,6 +140,7 @@ services:
 
   airflow-scheduler:
     <<: *airflow-common
+    image: lhernandez0/clio_airflow-scheduler:latest
     command: scheduler
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8974/health"]
@@ -154,6 +156,7 @@ services:
 
   airflow-worker:
     <<: *airflow-common
+    image: lhernandez0/clio_airflow-worker:latest
     command: celery worker
     healthcheck:
       # yamllint disable rule:line-length
@@ -177,6 +180,7 @@ services:
 
   airflow-triggerer:
     <<: *airflow-common
+    image: lhernandez0/clio_airflow-triggerer:latest
     command: triggerer
     healthcheck:
       test: ["CMD-SHELL", 'airflow jobs check --job-type TriggererJob --hostname "$${HOSTNAME}"']
@@ -192,6 +196,7 @@ services:
 
   airflow-init:
     <<: *airflow-common
+    image: lhernandez0/clio_airflow-init:latest
     entrypoint: /bin/bash
     # yamllint disable rule:line-length
     command:
@@ -256,6 +261,7 @@ services:
 
   airflow-cli:
     <<: *airflow-common
+    image: lhernandez0/clio_airflow-cli:latest
     profiles:
       - debug
     environment:
@@ -272,6 +278,7 @@ services:
   # See: https://docs.docker.com/compose/profiles/
   flower:
     <<: *airflow-common
+    image: lhernandez0/clio_flower:latest
     command: celery flower
     profiles:
       - flower
@@ -326,6 +333,7 @@ services:
 
   clio_webserver:
     build: ./webserver
+    image: lhernandez0/clio_webserver:latest
     ports:
       - "8000:8000"
     environment:
