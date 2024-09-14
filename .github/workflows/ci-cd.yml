@@ -34,7 +34,6 @@ jobs:
           docker tag clio-airflow-worker:latest lhernandez0/clio_airflow-worker:latest
           docker tag clio-airflow-triggerer:latest lhernandez0/clio_airflow-triggerer:latest
           docker tag clio-airflow-init:latest lhernandez0/clio_airflow-init:latest
-          docker tag clio-airflow-cli:latest lhernandez0/clio_airflow-cli:latest
           docker tag clio-clio_webserver:latest lhernandez0/clio_webserver:latest
 
       # Push Docker image to Docker Hub
@@ -51,7 +50,6 @@ jobs:
           docker push lhernandez0/clio-airflow-worker:latest
           docker push lhernandez0/clio-airflow-triggerer:latest
           docker push lhernandez0/clio-airflow-init:latest
-          docker push lhernandez0/clio-airflow-cli:latest
           docker push lhernandez0/clio-clio_webserver:latest
 
   deploy:
