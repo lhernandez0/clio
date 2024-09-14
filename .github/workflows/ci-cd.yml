@@ -97,10 +97,10 @@ jobs:
             EOF
 
             # Fetch the latest changes
-            git pull origin release
+            git pull origin release && git switch release
 
             # Create Airflow logs directory
-            mkdir -p $AIRFLOW_PROJ_DIR/logs
+            mkdir -p ${AIRFLOW_PROJ_DIR}/logs
 
             # Install Docker Compose if not already installed
             if ! docker-compose --version > /dev/null 2>&1; then
