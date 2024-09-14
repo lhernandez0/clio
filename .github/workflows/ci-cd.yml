@@ -82,8 +82,22 @@ jobs:
             # Navigate to the repository directory
             cd clio
 
+            # Delete the .env file if it exists
+            rm -f .env
+
+            # Create a new .env file with the secrets
+            cat << EOF > .env
+            AIRFLOW_IMAGE_NAME=${AIRFLOW_IMAGE_NAME}
+            AIRFLOW_UID=${AIRFLOW_UID}
+            AIRFLOW_PROJ_DIR=${AIRFLOW_PROJ_DIR}
+            _AIRFLOW_WWW_USER_USERNAME=${_AIRFLOW_WWW_USER_USERNAME}
+            _AIRFLOW_WWW_USER_PASSWORD=${_AIRFLOW_WWW_USER_PASSWORD}
+            MODELS_DIR=${MODELS_DIR}
+            OPENAI_API_KEY=${OPENAI_API_KEY}
+            EOF
+
             # Fetch the latest changes
-            git pull origin main
+            git pull origin release
 
             # Install Docker Compose if not already installed
             if ! docker-compose --version > /dev/null 2>&1; then
@@ -92,11 +106,11 @@ jobs:
             fi
 
             # Pull the latest Docker images
-            docker-compose pull
+            docker-compose --env-file .env  -f docker-compose.deploy.yaml pull
 
             # Stop and remove old containers and networks
-            docker-compose down
+            docker-compose --env-file .env  -f docker-compose.deploy.yaml down
 
             # Run the new containers
-            docker-compose up -d
+            docker-compose --env-file .env  -f docker-compose.deploy.yaml up -d
             '
