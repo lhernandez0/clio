@@ -72,7 +72,9 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
           script: |
-            # Clone the repository if it doesn't already exist
+            # Use bash explicitly
+            bash -c '
+            # Clone the repository if it doesn’t already exist
             if [ ! -d "clio" ]; then
               git clone https://github.com/lhernandez0/clio.git
             fi
@@ -85,7 +87,7 @@ jobs:
 
             # Install Docker Compose if not already installed
             if ! docker-compose --version > /dev/null 2>&1; then
-              sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+              sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep "tag_name" | cut -d\" -f4)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
               sudo chmod +x /usr/local/bin/docker-compose
             fi
 
@@ -97,3 +99,4 @@ jobs:
 
             # Run the new containers
             docker-compose up -d
+            '
