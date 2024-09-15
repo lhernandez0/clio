@@ -29,11 +29,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker-compose build
-          docker tag clio-airflow-webserver:latest lhernandez0/clio-airflow-webserver:latest
-          docker tag clio-airflow-scheduler:latest lhernandez0/clio-airflow-scheduler:latest
-          docker tag clio-airflow-worker:latest lhernandez0/clio-airflow-worker:latest
-          docker tag clio-airflow-triggerer:latest lhernandez0/clio-airflow-triggerer:latest
-          docker tag clio-airflow-init:latest lhernandez0/clio-airflow-init:latest
+          docker tag clio-airflow-webserver:latest lhernandez0/clio-airflow-common:latest
           docker tag clio-clio_webserver:latest lhernandez0/clio-webserver:latest
 
       # List the Docker images
@@ -50,11 +46,7 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker push lhernandez0/clio-airflow-webserver:latest
-          docker push lhernandez0/clio-airflow-scheduler:latest
-          docker push lhernandez0/clio-airflow-worker:latest
-          docker push lhernandez0/clio-airflow-triggerer:latest
-          docker push lhernandez0/clio-airflow-init:latest
+          docker push lhernandez0/clio-airflow-common:latest
           docker push lhernandez0/clio-webserver:latest
 
   deploy:
