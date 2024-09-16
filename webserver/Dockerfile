@@ -1,7 +1,7 @@
 # ARGs for Python builder and Distroless base images
 ARG PYTHON_BUILDER_IMAGE=python:3.11-slim
 ARG GOOGLE_DISTROLESS_BASE_IMAGE=gcr.io/distroless/base-debian12
-ARG CHIPSET_ARCH=x86_64-linux-gnu
+ARG CHIPSET_ARCH=aarch64-linux-gnu
 
 # First stage: Build the Python app in a slim Python image
 FROM ${PYTHON_BUILDER_IMAGE} AS python-base
@@ -32,7 +32,7 @@ COPY . /app/webserver
 FROM ${GOOGLE_DISTROLESS_BASE_IMAGE}
 
 # ARG for architecture
-ARG CHIPSET_ARCH=x86_64-linux-gnu
+ARG CHIPSET_ARCH=aarch64-linux-gnu
 
 # Copy Python and installed packages from the python-base image
 COPY --from=python-base /usr/local/lib/ /usr/local/lib/
