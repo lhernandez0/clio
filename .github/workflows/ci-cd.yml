@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main # Deploy when the main branch is updated
+      - release
 
 jobs:
   build:
@@ -25,18 +25,19 @@ jobs:
           sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
 
-      # Build the Docker image
+      # Build the Docker images
       - name: Build Docker image
         run: |
           docker-compose build
-          docker tag clio-airflow-webserver:latest lhernandez0/clio_airflow-webserver:latest
-          docker tag clio-airflow-scheduler:latest lhernandez0/clio_airflow-scheduler:latest
-          docker tag clio-airflow-worker:latest lhernandez0/clio_airflow-worker:latest
-          docker tag clio-airflow-triggerer:latest lhernandez0/clio_airflow-triggerer:latest
-          docker tag clio-airflow-init:latest lhernandez0/clio_airflow-init:latest
-          docker tag clio-clio_webserver:latest lhernandez0/clio_webserver:latest
+          docker tag clio-airflow-webserver:latest lhernandez0/clio-airflow-common:latest
+          docker tag clio-clio_webserver:latest lhernandez0/clio-webserver:latest
 
-      # Push Docker image to Docker Hub
+      # List the Docker images
+      - name: List Docker images
+        run: |
+          docker images
+
+      # Push Docker images to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
         with:
@@ -45,12 +46,8 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker push lhernandez0/clio-airflow-webserver:latest
-          docker push lhernandez0/clio-airflow-scheduler:latest
-          docker push lhernandez0/clio-airflow-worker:latest
-          docker push lhernandez0/clio-airflow-triggerer:latest
-          docker push lhernandez0/clio-airflow-init:latest
-          docker push lhernandez0/clio-clio_webserver:latest
+          docker push lhernandez0/clio-airflow-common:latest
+          docker push lhernandez0/clio-webserver:latest
 
   deploy:
     needs: build
@@ -67,7 +64,9 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
           script: |
-            # Clone the repository if it doesn't already exist
+            # Use bash explicitly
+            bash -c '
+            # Clone the repository if it doesn’t already exist
             if [ ! -d "clio" ]; then
               git clone https://github.com/lhernandez0/clio.git
             fi
@@ -75,20 +74,38 @@ jobs:
             # Navigate to the repository directory
             cd clio
 
+            # Delete the .env file if it exists
+            rm -f .env
+
+            # Create a new .env file with the secrets
+            cat << EOF > .env
+            AIRFLOW_IMAGE_NAME=${{ secrets.AIRFLOW_IMAGE_NAME }}
+            AIRFLOW_UID=${{ secrets.AIRFLOW_UID }}
+            AIRFLOW_PROJ_DIR=${{ secrets.AIRFLOW_PROJ_DIR }}
+            _AIRFLOW_WWW_USER_USERNAME=${{ secrets._AIRFLOW_WWW_USER_USERNAME }}
+            _AIRFLOW_WWW_USER_PASSWORD=${{ secrets._AIRFLOW_WWW_USER_PASSWORD }}
+            MODELS_DIR=${{ secrets.MODELS_DIR }}
+            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+            EOF
+
             # Fetch the latest changes
-            git pull origin main
+            git pull origin release && git switch release
+
+            # Create Airflow logs directory
+            mkdir -p ${{ secrets.AIRFLOW_PROJ_DIR }}/logs
 
             # Install Docker Compose if not already installed
             if ! docker-compose --version > /dev/null 2>&1; then
-              sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+              sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep "tag_name" | cut -d\" -f4)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
               sudo chmod +x /usr/local/bin/docker-compose
             fi
 
             # Pull the latest Docker images
-            docker-compose pull
+            docker-compose --env-file .env  -f docker-compose.deploy.yaml pull
 
             # Stop and remove old containers and networks
-            docker-compose down
+            docker-compose --env-file .env  -f docker-compose.deploy.yaml down
 
             # Run the new containers
-            docker-compose up -d
+            docker-compose --env-file .env  -f docker-compose.deploy.yaml up -d
+            '
