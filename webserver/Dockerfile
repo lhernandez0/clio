@@ -1,10 +1,22 @@
+# ARGs for architecture and platform
+ARG TARGETARCH=arm64
+ARG TARGETPLATFORM=linux/arm64
+ARG CHIPSET_ARCH=aarch64-linux-gnu
+
 # ARGs for Python builder and Distroless base images
 ARG PYTHON_BUILDER_IMAGE=python:3.11-slim
 ARG GOOGLE_DISTROLESS_BASE_IMAGE=gcr.io/distroless/base-debian12
-ARG CHIPSET_ARCH=x86_64-linux-gnu
+ARG CHIPSET_ARCH=aarch64-linux-gnu
 
 # First stage: Build the Python app in a slim Python image
 FROM ${PYTHON_BUILDER_IMAGE} AS python-base
+
+# Install system dependencies
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install gcc g++ -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
@@ -32,7 +44,7 @@ COPY . /app/webserver
 FROM ${GOOGLE_DISTROLESS_BASE_IMAGE}
 
 # ARG for architecture
-ARG CHIPSET_ARCH=x86_64-linux-gnu
+ARG CHIPSET_ARCH=aarch64-linux-gnu
 
 # Copy Python and installed packages from the python-base image
 COPY --from=python-base /usr/local/lib/ /usr/local/lib/
@@ -40,9 +52,10 @@ COPY --from=python-base /usr/local/bin/ /usr/local/bin/
 
 # Copy necessary runtime libraries and binaries
 COPY --from=python-base \
-    /lib/${CHIPSET_ARCH}/libz.so.1 \
-    /lib/${CHIPSET_ARCH}/libexpat* \
-    /lib/${CHIPSET_ARCH}/ 
+    /usr/lib/${CHIPSET_ARCH}/libz.so.1 \
+    /usr/lib/${CHIPSET_ARCH}/libexpat* \
+    /usr/lib/${CHIPSET_ARCH}/
+
 COPY --from=python-base \
     /usr/lib/${CHIPSET_ARCH}/libffi* \
     /usr/lib/${CHIPSET_ARCH}/libgcc_s.so.1 \

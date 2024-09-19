@@ -7,8 +7,8 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    environment: VPS_CICD
+    runs-on: [self-hosted, bob-the-builder]
+    environment: RELEASE
 
     steps:
       # Checkout the repository
@@ -44,7 +44,7 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - name: Push Docker image
+      - name: Push Docker images
         run: |
           docker push lhernandez0/clio-airflow-common:latest
           docker push lhernandez0/clio-webserver:latest
@@ -52,7 +52,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    environment: VPS_CICD
+    environment: RELEASE
 
     steps:
       # Deploy to VPS using SSH
