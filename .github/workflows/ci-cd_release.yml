@@ -39,7 +39,7 @@ jobs:
       # Build the Docker images
       - name: Build Docker image
         run: |
-          docker-compose build
+          docker compose build --parallel
           docker tag clio-airflow-webserver:latest lhernandez0/clio-airflow-common:latest
           docker tag clio-clio_webserver:latest lhernandez0/clio-webserver:latest
 
@@ -53,7 +53,7 @@ jobs:
         run: |
           # Add your test commands here
           echo "Running tests..."
-          # Example: docker-compose run --rm app pytest
+          # Example: docker compose run --rm app pytest
 
   push_and_deploy:
     needs: build_and_test
@@ -129,11 +129,11 @@ jobs:
             fi
 
             # Pull the latest Docker images
-            docker-compose --env-file .env -f docker-compose.deploy.yaml pull
+            docker compose --env-file .env -f docker-compose.deploy.yaml pull
 
             # Stop and remove old containers and networks
-            docker-compose --env-file .env -f docker-compose.deploy.yaml down
+            docker compose --env-file .env -f docker-compose.deploy.yaml down
 
             # Run the new containers
-            docker-compose --env-file .env -f docker-compose.deploy.yaml up -d
+            docker compose --env-file .env -f docker-compose.deploy.yaml up -d
             EOT
