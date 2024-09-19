@@ -101,7 +101,9 @@ jobs:
             EOF
 
             # Fetch the latest changes
-            git pull origin release && git switch release
+            git fetch origin
+            git checkout release || git checkout -b release origin/release
+            git pull
 
             # Create Airflow logs directory
             mkdir -p "${{ secrets.AIRFLOW_PROJ_DIR }}/logs"
