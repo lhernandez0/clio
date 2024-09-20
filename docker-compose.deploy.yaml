@@ -50,7 +50,7 @@ x-airflow-common:
   # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
   # image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.10.0}
-  image: lhernandez0/clio-airflow-common:arm64
+  image: lhernandez0/clio-airflow-common:latest
   platform: linux/arm64
   environment:
     &airflow-common-env
@@ -327,9 +327,10 @@ services:
     restart: always
 
   clio_webserver:
-    image: lhernandez0/clio-webserver:arm64
+    image: lhernandez0/clio-webserver:latest
+    platform: linux/arm64
     ports:
-      - "8001:8000"
+      - "8000:8000"
     environment:
       ELASTICSEARCH_HOST: elasticsearch
       ELASTICSEARCH_PORT: 9200
