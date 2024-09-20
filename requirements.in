@@ -15,12 +15,13 @@ langdetect
 openai
 psycopg2-binary
 sentence-transformers
---extra-index-url https://download.pytorch.org/whl/cpu/
-torch
+# Extra index URL for PyTorch
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.4.1
 transformers[torch]
 uvicorn
 
 # spacy
-spacy~=3.7.6
+spacy==3.7.5
 en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.0/en_core_web_sm-3.7.0.tar.gz
 en_core_web_md @ https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.7.0/en_core_web_md-3.7.0.tar.gz
