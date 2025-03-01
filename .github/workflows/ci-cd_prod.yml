@@ -39,7 +39,7 @@ jobs:
       # Build the Docker images
       - name: Build Docker image
         run: |
-          docker compose build --parallel
+          docker compose -f docker-compose.deploy.yaml build --parallel
           docker tag clio-airflow-webserver:latest lhernandez0/clio-airflow-common:latest
           docker tag clio-clio_webserver:latest lhernandez0/clio-webserver:latest
 
