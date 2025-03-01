@@ -327,6 +327,9 @@ services:
     restart: always
 
   clio_webserver:
+    build:
+      context: ./webserver
+      dockerfile: Dockerfile.deploy
     image: lhernandez0/clio-webserver:latest
     platform: linux/arm64
     ports:
