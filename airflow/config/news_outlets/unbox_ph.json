@@ -1,0 +1,9 @@
+{
+    "name": "UNBOX PH",
+    "rss_feeds": [
+        {
+            "feed_name": "Main Feed",
+            "url": "https://www.unbox.ph/feed/"
+        }
+    ]
+}

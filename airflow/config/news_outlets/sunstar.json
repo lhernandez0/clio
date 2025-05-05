@@ -1,0 +1,9 @@
+{
+    "name": "SunStar",
+    "rss_feeds": [
+        {
+            "feed_name": "Home",
+            "url": "https://www.sunstar.com.ph/api/v1/collections/home.rss"
+        }
+    ]
+}
