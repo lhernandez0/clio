@@ -1,0 +1,9 @@
+{
+    "name": "Top Gear Philippines",
+    "rss_feeds": [
+        {
+            "feed_name": "Main Feed",
+            "url": "https://www.topgear.com.ph/feed/rss1"
+        }
+    ]
+}

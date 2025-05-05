@@ -1,0 +1,139 @@
+{
+    "name": "Manila Standard",
+    "url": "https://manilastandard.net",
+    "feeds": [
+      {
+        "title": "Home",
+        "url": "https://manilastandard.net/ms-rss/"
+      },
+      {
+        "title": "News",
+        "url": "https://manilastandard.net/ms-rss?category=news"
+      },
+      {
+        "title": "Top Stories",
+        "url": "https://manilastandard.net/ms-rss?category=top-stories"
+      },
+      {
+        "title": "National",
+        "url": "https://manilastandard.net/ms-rss?category=national"
+      },
+      {
+        "title": "World News",
+        "url": "https://manilastandard.net/ms-rss?category=world-news"
+      },
+      {
+        "title": "Pinoy Abroad",
+        "url": "https://manilastandard.net/ms-rss?category=pinoy-abroad"
+      },
+      {
+        "title": "Special Features",
+        "url": "https://manilastandard.net/ms-rss?category=special-feature"
+      },
+      {
+        "title": "Opinion",
+        "url": "https://manilastandard.net/ms-rss?category=opinion"
+      },
+      {
+        "title": "Editorial",
+        "url": "https://manilastandard.net/ms-rss?category=editorial"
+      },
+      {
+        "title": "Columns (Opinion)",
+        "url": "https://manilastandard.net/ms-rss?category=columns"
+      },
+      {
+        "title": "Business",
+        "url": "https://manilastandard.net/ms-rss?category=business"
+      },
+      {
+        "title": "Corporate",
+        "url": "https://manilastandard.net/ms-rss?category=corporate"
+      },
+      {
+        "title": "Economy & Trade",
+        "url": "https://manilastandard.net/ms-rss?category=economy-trade"
+      },
+      {
+        "title": "Stocks",
+        "url": "https://manilastandard.net/ms-rss?category=business-stocks"
+      },
+      {
+        "title": "Banking & Finance",
+        "url": "https://manilastandard.net/ms-rss?category=banking-report"
+      },
+      {
+        "title": "Agri & Mining",
+        "url": "https://manilastandard.net/ms-rss?category=csr-mining"
+      },
+      {
+        "title": "Energy",
+        "url": "https://manilastandard.net/ms-rss?category=power-technology"
+      },
+      {
+        "title": "IT & Telecom",
+        "url": "https://manilastandard.net/ms-rss?category=it-telecom"
+      },
+      {
+        "title": "Columns (Business)",
+        "url": "https://manilastandard.net/ms-rss?category=business-columns"
+      },
+      {
+        "title": "Sports",
+        "url": "https://manilastandard.net/ms-rss?category=sports"
+      },
+      {
+        "title": "Basketball",
+        "url": "https://manilastandard.net/ms-rss?category=basketball"
+      },
+      {
+        "title": "Volleyball",
+        "url": "https://manilastandard.net/ms-rss?category=volleyball"
+      },
+      {
+        "title": "Fightsports",
+        "url": "https://manilastandard.net/ms-rss?category=fightsports"
+      },
+      {
+        "title": "Active",
+        "url": "https://manilastandard.net/ms-rss?category=active"
+      },
+      {
+        "title": "Sports Plus",
+        "url": "https://manilastandard.net/ms-rss?category=sports-plus"
+      },
+      {
+        "title": "One Championship",
+        "url": "https://manilastandard.net/ms-rss?category=one-championship"
+      },
+      {
+        "title": "Columns (Sports)",
+        "url": "https://manilastandard.net/ms-rss?category=sports-columns"
+      },
+      {
+        "title": "Entertainment",
+        "url": "https://manilastandard.net/ms-rss?category=entertainment"
+      },
+      {
+        "title": "TV & Movies",
+        "url": "https://manilastandard.net/ms-rss?category=tv-movies"
+      },
+      {
+        "title": "Celebrity Profiles",
+        "url": "https://manilastandard.net/ms-rss?category=celebrity-profiles"
+      },
+      {
+        "title": "Music & Concerts",
+        "url": "https://manilastandard.net/ms-rss?category=music-concerts"
+      },
+      {
+        "title": "Digital Media",
+        "url": "https://manilastandard.net/ms-rss?category=digital-media"
+      },
+      {
+        "title": "Columns (Entertainment)",
+        "url": "https://manilastandard.net/ms-rss?category=entertainment-columns"
+      }
+    ]
+  }
+  

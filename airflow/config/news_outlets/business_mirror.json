@@ -1,0 +1,9 @@
+{
+    "name": "BusinessMirror",
+    "rss_feeds": [
+        {
+            "feed_name": "Main Feed",
+            "url": "https://businessmirror.com.ph/feed/"
+        }
+    ]
+}
