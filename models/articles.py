@@ -15,23 +15,55 @@ from elasticsearch_dsl import (
 from sentence_transformers import SentenceTransformer
 from transformers import pipeline
 
-# Load the sentiment analysis and embedding models
-model_name = "distilbert/distilbert-base-uncased-finetuned-sst-2-english"
-sentiment_pipeline = pipeline(
-    "sentiment-analysis", model=model_name, device=-1
-)  # device=-1 ensures CPU usage
-embedding_model = SentenceTransformer(
-    "all-MiniLM-L6-v2", device="cpu"
-)  # Ensure CPU usage
-nlp = spacy.load("en_core_web_md")  # Load the spaCy model
+# Constants for model selection
+SENTIMENT_MODEL = "distilbert/distilbert-base-uncased-finetuned-sst-2-english"
+EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+SPACY_MODEL = "en_core_web_md"
+
+# Load models
+sentiment_pipeline = pipeline("sentiment-analysis", model=SENTIMENT_MODEL, device=-1)
+embedding_model = SentenceTransformer(EMBEDDING_MODEL, device="cpu")
+nlp = spacy.load(SPACY_MODEL)
+
+# Relevant named entity labels
+RELEVANT_LABELS = {
+    "PERSON",
+    "ORG",
+    "GPE",
+    "LOC",
+    "EVENT",
+    "MONEY",
+    "PRODUCT",
+    "WORK_OF_ART",
+}
 
 
-def clean_summary(summary):
-    # Parse the HTML content
-    soup = BeautifulSoup(summary, "html.parser")
-    # Extract text, removing all HTML tags
-    cleaned_text = soup.get_text(separator=" ")
-    return cleaned_text
+def clean_text(html_text: str) -> str:
+    """Removes HTML tags and returns clean text."""
+    return BeautifulSoup(html_text, "html.parser").get_text(separator=" ")
+
+
+def analyze_sentiment(text: str) -> float:
+    """Returns sentiment score from -1 (negative) to 1 (positive)."""
+    result = sentiment_pipeline(text[:512])
+    if result[0]["label"] == "NEGATIVE":
+        return -result[0]["score"]
+    return result[0]["score"]
+
+
+def generate_embedding(text: str) -> List[float]:
+    """Generates an embedding vector for the given text."""
+    return embedding_model.encode(text).tolist()
+
+
+def extract_entities(text: str) -> List[Dict[str, Any]]:
+    """Extracts relevant named entities from the text."""
+    doc = nlp(text)
+    return [
+        {"text": ent.text, "label": ent.label_}
+        for ent in doc.ents
+        if ent.label_ in RELEVANT_LABELS
+    ]
 
 
 class Article(Document):
@@ -52,34 +84,22 @@ class Article(Document):
 
     def clean(self):
         if not self.embedding:
-            # Use Hugging Face for sentiment analysis
-            sentiment_result = sentiment_pipeline(
-                self.summary[:512]
-            )  # Truncate to 512 tokens if necessary
-            self.sentiment = sentiment_result[0]["score"] if sentiment_result else 0.0
-
-            # Use SentenceTransformers for embeddings
-            self.embedding = embedding_model.encode(self.summary).tolist()
-
-            # Clean the summary text
-            self.summary = clean_summary(self.summary)
-
-            # Process entities with spaCy
-            doc = nlp(self.summary)
-            relevant_labels = {
-                "PERSON",
-                "ORG",
-                "GPE",
-                "LOC",
-                "EVENT",
-                "MONEY",
-                "PRODUCT",
-                "WORK_OF_ART",
-            }
-            self.entities = [
-                {"text": ent.text, "label": ent.label_}
-                for ent in doc.ents
-                if ent.label_ in relevant_labels
-            ]
-
+            self.summary = clean_text(self.summary)
+            self.sentiment = analyze_sentiment(self.summary)
+            self.embedding = generate_embedding(self.summary)
+            self.entities = extract_entities(self.summary)
             self.nlp_processed = True
+
+
+if __name__ == "__main__":
+    sample_text = """
+        WASHINGTON – Volodymyr Zelensky said Friday that his relations with the United States can still be repaired, after President Donald Trump shouted at him in an angry White House meltdown accusing the Ukrainian leader of refusing to make peace with Russia. “Of course,” Zelensky said when asked in a Fox News interview if the relationship with Trump could be salvaged. US-Ukrainian ties are about “more than two presidents,” he said, adding that Ukraine badly needs Washington’s help in the fight against Russia’s far bigger and better-armed military. “It will be difficult without your support,” Zelensky said on Fox — […]... Keep on reading:  Zelensky says Trump relationship can be repaired after White House row
+        """
+
+    article = Article(summary=sample_text)
+    article.clean()
+
+    print("Cleaned Summary:", article.summary)
+    print("Sentiment Score:", article.sentiment)
+    print("Embedding Vector (first 5 values):", article.embedding[:5])
+    print("Extracted Entities:", article.entities)
