@@ -112,6 +112,8 @@ services:
     image: redis:7.2-bookworm
     expose:
       - 6379
+    volumes:
+      - redis-data:/data  # Persistent volume for Redis data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -301,6 +303,8 @@ services:
       - xpack.security.http.ssl.verification_mode=none
     ports:
       - "9200:9200"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data  # Persistent volume for Elasticsearch data
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:9200/_cat/health || exit 1"]
       interval: 30s
@@ -327,6 +331,9 @@ services:
     restart: always
 
   clio_webserver:
+    build:
+      context: ./webserver
+      dockerfile: Dockerfile.deploy
     image: lhernandez0/clio-webserver:latest
     platform: linux/arm64
     ports:
@@ -345,3 +352,6 @@ services:
 
 volumes:
   postgres-db-volume:
+  redis-data:
+  elasticsearch-data:
+

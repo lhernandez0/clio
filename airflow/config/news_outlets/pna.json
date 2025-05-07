@@ -1,0 +1,9 @@
+{
+    "name": "Philippine News Agency",
+    "rss_feeds": [
+        {
+            "feed_name": "Latest News",
+            "url": "https://www.pna.gov.ph/latest.rss"
+        }
+    ]
+}

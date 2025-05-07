@@ -1,0 +1,9 @@
+{
+    "name": "Interaksyon",
+    "rss_feeds": [
+        {
+            "feed_name": "Main Feed",
+            "url": "https://www.interaksyon.com/feed/"
+        }
+    ]
+}
