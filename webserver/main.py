@@ -11,6 +11,10 @@ from models.openai import ChatRequest
 from webserver import clients
 from webserver.config import get_es_connection
 from webserver.services import (
+    get_articles_count,
+    get_recent_headlines,
+    get_sentiment_stats,
+    get_sources_count,
     get_trending_entities,
     semantic_search,
     stream_chatgpt_response,
@@ -156,6 +160,72 @@ async def chatgpt_with_messages_websocket(websocket: WebSocket):
 @app.get("/")
 async def read_root():
     return FileResponse("webserver/static/index.html")
+
+
+# Dashboard-specific endpoints
+@app.get("/dashboard/articles/count/")
+async def articles_count_endpoint(
+    start_date: Optional[date] = Query(default=None),
+    end_date: Optional[date] = Query(default=None),
+):
+    """Get count of articles within date range"""
+    if not start_date or not end_date:
+        start_date, end_date = get_default_dates()
+    else:
+        start_date = start_date.isoformat()
+        end_date = end_date.isoformat()
+
+    count = get_articles_count(start_date, end_date)
+    return {"count": count}
+
+
+@app.get("/dashboard/sources/")
+async def sources_endpoint(
+    start_date: Optional[date] = Query(default=None),
+    end_date: Optional[date] = Query(default=None),
+):
+    """Get unique sources and their counts within date range"""
+    if not start_date or not end_date:
+        start_date, end_date = get_default_dates()
+    else:
+        start_date = start_date.isoformat()
+        end_date = end_date.isoformat()
+
+    sources = get_sources_count(start_date, end_date)
+    return {"sources": sources, "count": len(sources)}
+
+
+@app.get("/dashboard/sentiment/")
+async def sentiment_endpoint(
+    start_date: Optional[date] = Query(default=None),
+    end_date: Optional[date] = Query(default=None),
+):
+    """Get sentiment statistics within date range"""
+    if not start_date or not end_date:
+        start_date, end_date = get_default_dates()
+    else:
+        start_date = start_date.isoformat()
+        end_date = end_date.isoformat()
+
+    stats = get_sentiment_stats(start_date, end_date)
+    return stats
+
+
+@app.get("/dashboard/headlines/")
+async def headlines_endpoint(
+    start_date: Optional[date] = Query(default=None),
+    end_date: Optional[date] = Query(default=None),
+    size: int = Query(default=10, ge=1, le=50),
+):
+    """Get recent headlines within date range"""
+    if not start_date or not end_date:
+        start_date, end_date = get_default_dates()
+    else:
+        start_date = start_date.isoformat()
+        end_date = end_date.isoformat()
+
+    headlines = get_recent_headlines(start_date, end_date, size)
+    return {"headlines": headlines}
 
 
 if __name__ == "__main__":

@@ -13,6 +13,8 @@ fastapi
 feedparser
 langdetect
 openai
+openapi-python-client
+plotly
 psycopg2-binary
 sentence-transformers
 # Extra index URL for PyTorch

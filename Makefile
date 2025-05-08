@@ -7,7 +7,7 @@ airflow-reqs: # Download airflow constraints
 	curl -o airflow-constraints.txt https://raw.githubusercontent.com/apache/airflow/constraints-$(AIRFLOW_VERSION)/constraints-$(PYTHON_VERSION).txt
 
 reqs: # Update requirements.txt
-	venv/bin/pip-compile -o requirements.txt --upgrade requirements.in
+	venv/bin/pip-compile -o requirements.txt requirements.in
 
 dev: reqs # Run reqs and install dependencies
 	venv/bin/pip install -r requirements.txt --no-cache-dir
@@ -38,6 +38,12 @@ db: # Set up PostgreSQL for Airflow in dev
 
 test: # Run tests
 	venv/bin/pytest -vv
+
+run-webserver: # Run the FastAPI server
+	uvicorn webserver.main:app --reload
+
+run-streamlit: # Run the Streamlit app
+	streamlit run streamlit/app.py
 
 help: # Show this help
 	@awk 'BEGIN {FS = ":.*?# "} /^[a-zA-Z_-]+:.*?# .*$$/ {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)

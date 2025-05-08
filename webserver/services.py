@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import List
+from typing import Any, Dict, List
 
 import spacy
 from elasticsearch_dsl import Q, Search
@@ -16,6 +16,151 @@ logger = setup_logging()
 # Load NLP models
 nlp = spacy.load("en_core_web_md")
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2", device="cpu")
+
+# Dashboard-specific endpoints
+
+
+def get_articles_count(start_date: str, end_date: str) -> int:
+    """
+    Get the count of articles within a date range without retrieving the documents.
+
+    Args:
+        start_date: Start date in ISO format
+        end_date: End date in ISO format
+
+    Returns:
+        int: Count of articles
+    """
+    # Create a search query with date filter but no need to retrieve docs
+    s = Search(index="rss_feeds").filter(
+        "range", published={"gte": start_date, "lte": end_date}
+    )
+    s = s.source(False)  # Don't retrieve source
+
+    # Count only
+    response = s.count()
+    logger.debug(f"Articles count for {start_date} to {end_date}: {response}")
+
+    return response
+
+
+def get_sources_count(start_date: str, end_date: str) -> Dict[str, int]:
+    """
+    Get the count of unique sources within a date range.
+
+    Args:
+        start_date: Start date in ISO format
+        end_date: End date in ISO format
+
+    Returns:
+        Dict: Dictionary with sources and their counts
+    """
+    # Create a search with aggregation
+    s = Search(index="rss_feeds").filter(
+        "range", published={"gte": start_date, "lte": end_date}
+    )
+
+    # Add aggregation for unique sources
+    s.aggs.bucket("sources", "terms", field="source.keyword", size=1000)
+
+    # Execute but don't retrieve docs
+    s = s.source(False)
+    response = s.execute()
+
+    # Convert results to dict
+    sources = {
+        bucket.key: bucket.doc_count for bucket in response.aggregations.sources.buckets
+    }
+
+    logger.debug(f"Sources count for {start_date} to {end_date}: {len(sources)}")
+    return sources
+
+
+def get_sentiment_stats(start_date: str, end_date: str) -> Dict[str, Any]:
+    """
+    Get sentiment statistics within a date range.
+
+    Args:
+        start_date: Start date in ISO format
+        end_date: End date in ISO format
+
+    Returns:
+        Dict: Dictionary with sentiment statistics
+    """
+    # Create a search with date filter
+    s = Search(index="rss_feeds").filter(
+        "range", published={"gte": start_date, "lte": end_date}
+    )
+
+    # Add aggregations for sentiment stats
+    s.aggs.metric("avg_sentiment", "avg", field="sentiment")
+
+    # Add sentiment distribution aggregation
+    s.aggs.bucket(
+        "sentiment_ranges",
+        "range",
+        field="sentiment",
+        ranges=[
+            {"key": "negative", "to": -0.1},
+            {"key": "neutral", "from": -0.1, "to": 0.1},
+            {"key": "positive", "from": 0.1},
+        ],
+    )
+
+    # Execute but don't retrieve docs
+    s = s.source(False)
+    response = s.execute()
+
+    # Extract sentiment statistics
+    stats = {
+        "average": response.aggregations.avg_sentiment.value,
+        "distribution": {
+            bucket.key: bucket.doc_count
+            for bucket in response.aggregations.sentiment_ranges.buckets
+        },
+    }
+
+    logger.debug(f"Sentiment stats for {start_date} to {end_date}: {stats}")
+    return stats
+
+
+def get_recent_headlines(start_date: str, end_date: str, size: int = 10) -> List[Dict]:
+    """
+    Get recent headlines within a date range.
+
+    Args:
+        start_date: Start date in ISO format
+        end_date: End date in ISO format
+        size: Number of headlines to return
+
+    Returns:
+        List: List of headlines with metadata
+    """
+    # Search with date filter, sorted by published date in descending order
+    s = (
+        Search(index="rss_feeds")
+        .filter("range", published={"gte": start_date, "lte": end_date})
+        .sort({"published": {"order": "desc"}})
+        .source(["title", "summary", "link", "published", "source", "sentiment"])[:size]
+    )  # Get only the top results
+
+    response = s.execute()
+
+    # Extract the headlines
+    headlines = [
+        {
+            "title": hit.title,
+            "summary": hit.summary,
+            "link": hit.link,
+            "published": hit.published,
+            "source": hit.source,
+            "sentiment": hit.sentiment if hasattr(hit, "sentiment") else 0,
+        }
+        for hit in response
+    ]
+
+    logger.debug(f"Recent headlines for {start_date} to {end_date}: {len(headlines)}")
+    return headlines
 
 
 def semantic_search(query: str, start_date: str, end_date: str, page: int, size: int):
