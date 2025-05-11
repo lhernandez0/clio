@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from typing import Any, Dict, List
 
 import spacy
@@ -78,11 +79,21 @@ class Article(Document):
         properties={"text": Text(), "label": Keyword()}
     )
     sentiment: float = Float()
+    ingestion_time: str = Date()
 
     class Index:
         name = "rss_feeds"
 
     def clean(self):
+        # Enforce that all articles have titles
+        if not self.title:
+            raise ValueError("Article must have a title")
+
+        # Use title if summary is missing
+        if not self.summary:
+            self.summary = self.title
+
+        # Clean and process the article
         if not self.embedding:
             self.summary = clean_text(self.summary)
             self.sentiment = analyze_sentiment(self.summary)
@@ -90,13 +101,29 @@ class Article(Document):
             self.entities = extract_entities(self.summary)
             self.nlp_processed = True
 
+        # Set ingestion time with timezone-aware UTC datetime
+        self.ingestion_time = datetime.now(timezone.utc).isoformat()
+
 
 if __name__ == "__main__":
+    sample_title = """
+        Zelensky says Trump relationship can be repaired after White House row
+        """
     sample_text = """
-        WASHINGTON – Volodymyr Zelensky said Friday that his relations with the United States can still be repaired, after President Donald Trump shouted at him in an angry White House meltdown accusing the Ukrainian leader of refusing to make peace with Russia. “Of course,” Zelensky said when asked in a Fox News interview if the relationship with Trump could be salvaged. US-Ukrainian ties are about “more than two presidents,” he said, adding that Ukraine badly needs Washington’s help in the fight against Russia’s far bigger and better-armed military. “It will be difficult without your support,” Zelensky said on Fox — […]... Keep on reading:  Zelensky says Trump relationship can be repaired after White House row
+        WASHINGTON – Volodymyr Zelensky said Friday that his relations with
+        the United States can still be repaired, after President Donald Trump
+        shouted at him in an angry White House meltdown accusing the Ukrainian
+        leader of refusing to make peace with Russia. “Of course,” Zelensky
+        said when asked in a Fox News interview if the relationship with Trump
+        could be salvaged. US-Ukrainian ties are about “more than two presidents,”
+        he said, adding that Ukraine badly needs Washington’s help in the fight
+        against Russia’s far bigger and better-armed military.
+        “It will be difficult without your support,” Zelensky said on Fox — […]...
+        Keep on reading:  Zelensky says Trump relationship can be repaired after
+        White House row.
         """
 
-    article = Article(summary=sample_text)
+    article = Article(title=sample_title, summary=sample_text)
     article.clean()
 
     print("Cleaned Summary:", article.summary)
